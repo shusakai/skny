@@ -1,8 +1,2 @@
 """Main module."""
-
-class XeniumPipeline:
-
-    # コンストラクタを定義
-    def __init__(self, name):
-        # メンバ
-        self.name = name
+from .preprocessing.distance_calculator import calculate_distance
