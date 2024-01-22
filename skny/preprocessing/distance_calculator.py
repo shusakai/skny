@@ -1,16 +1,14 @@
 # load library
-import stlearn as st
 import scanpy as sc
-import squidpy as sq
+import stlearn as st
 import numpy as np
+import pandas as pd
+import plotly.express as px
+import scipy.stats
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib
 import cv2
-import pandas as pd
-import scipy.stats
-import seaborn as sns
-import plotly.express as px
 from PIL import Image
 import networkx as nx
 import math
