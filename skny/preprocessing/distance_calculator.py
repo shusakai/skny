@@ -112,7 +112,7 @@ def calculate_distance(grid, pos_marker_ls, neg_marker_ls):
         if s[-1] == -1:
             contours_ += [i]
     
-    img_color_with_contours = cv2.drawContours(img_color, contours_, -1, (0,255,0), 1)
+    img_color_with_contours = cv2.drawContours(img_med, contours_, -1, (0,255,0), 1)
     grid.uns["marker_delineation"] = img_color_with_contours # add to grid object
 
 
