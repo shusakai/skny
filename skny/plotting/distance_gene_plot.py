@@ -15,6 +15,9 @@ def distance_gene_plot(
     std: bool
     min_grids: int
     '''
+    ## get col and row length data from grid object --------------------------
+    N_ROW = len(grid.uns["grid_yedges"]) - 1
+    N_COL = len(grid.uns["grid_xedges"]) - 1
 
     # define variable which is name of table of gene expression by region--------------
     # if roi is selected

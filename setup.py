@@ -17,6 +17,8 @@ with open("requirements.txt") as f:
 
 test_requirements = [ ]
 
+setup_requirements = []
+
 setup(
     author="Shunsuke A. Sakai",
     author_email='shusakai@east.ncc.go.jp',
@@ -43,6 +45,7 @@ setup(
     keywords='skny',
     name='skny',
     packages=find_packages(include=['skny', 'skny.*']),
+    setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/shusakai/skny',
