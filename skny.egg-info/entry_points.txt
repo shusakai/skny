@@ -1,2 +1,3 @@
 [console_scripts]
 skny = skny.cli:main
+

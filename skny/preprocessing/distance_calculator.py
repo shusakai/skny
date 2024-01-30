@@ -1,6 +1,4 @@
 # load library
-import scanpy as sc
-import stlearn as st
 import numpy as np
 import pandas as pd
 import plotly.express as px
