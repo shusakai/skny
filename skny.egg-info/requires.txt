@@ -1,8 +1,0 @@
-matplotlib
-pandas
-plotly
-scipy
-seaborn
-opencv-python
-numpy<1.22,>=1.18
-stlearn
