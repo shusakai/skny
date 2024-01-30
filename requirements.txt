@@ -1,10 +1,8 @@
 matplotlib
 pandas
 plotly
-scanpy>=1.8.2
 scipy
 seaborn
-squidpy
-stlearn
-numpy>=1.18,<1.22
 opencv-python
+numpy>=1.18,<1.22
+stlearn
