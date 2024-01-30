@@ -1,0 +1,88 @@
+Metadata-Version: 2.1
+Name: skny
+Version: 0.2.2
+Summary: Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
+Home-page: https://github.com/shusakai/skny
+Author: Shunsuke A. Sakai
+Author-email: shusakai@east.ncc.go.jp
+License: MIT license
+Keywords: skny
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Python: >=3.8
+License-File: LICENSE
+License-File: AUTHORS.rst
+Requires-Dist: matplotlib
+Requires-Dist: pandas
+Requires-Dist: plotly
+Requires-Dist: scipy
+Requires-Dist: seaborn
+Requires-Dist: opencv-python
+Requires-Dist: numpy<1.22,>=1.18
+Requires-Dist: stlearn
+
+====
+SKNY
+====
+
+
+.. image:: https://img.shields.io/pypi/v/skny.svg
+        :target: https://pypi.python.org/pypi/skny
+
+.. image:: https://img.shields.io/travis/shusakai/skny.svg
+        :target: https://travis-ci.com/shusakai/skny
+
+.. image:: https://readthedocs.org/projects/skny/badge/?version=latest
+        :target: https://skny.readthedocs.io/en/latest/?version=latest
+        :alt: Documentation Status
+
+
+
+
+Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
+
+
+* Free software: MIT license
+* Documentation: https://skny.readthedocs.io.
+
+
+Features
+--------
+
+* TODO
+
+Credits
+-------
+
+This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+
+
+=======
+History
+=======
+
+0.1.0 (2024-01-21)
+------------------
+
+* First release on PyPI.
+
+0.1.1 (2024-01-30)
+------------------
+
+0.1.2 (2024-01-30)
+------------------
+
+0.2.1 (2024-01-30)
+------------------
+
+0.2.2 (2024-01-30)
+------------------
+
