@@ -1,1 +1,10 @@
-Click>=7.0
+matplotlib
+pandas
+plotly
+scanpy
+scipy
+seaborn
+squidpy
+stlearn
+numpy==1.22
+opencv-python

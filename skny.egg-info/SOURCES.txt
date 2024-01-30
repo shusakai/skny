@@ -4,6 +4,7 @@ HISTORY.rst
 LICENSE
 MANIFEST.in
 README.rst
+requirements.txt
 setup.cfg
 setup.py
 docs/Makefile
@@ -18,10 +19,8 @@ docs/readme.rst
 docs/usage.rst
 skny/__init__.py
 skny/cli.py
-skny/phenocycler_pipeline.py
 skny/pl.py
 skny/pp.py
-skny/xenium_pipeline.py
 skny.egg-info/PKG-INFO
 skny.egg-info/SOURCES.txt
 skny.egg-info/dependency_links.txt
