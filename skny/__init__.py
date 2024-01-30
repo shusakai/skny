@@ -2,7 +2,7 @@
 
 __author__ = """Shunsuke A. Sakai"""
 __email__ = 'shusakai@east.ncc.go.jp'
-__version__ = '0.2.3'
+__version__ = '0.2.5'
 __url__  = 'https://github.com/shusakai/skny'
 
 
