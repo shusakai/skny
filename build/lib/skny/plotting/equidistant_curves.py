@@ -1,5 +1,6 @@
 # import
 import plotly.express as px
+from plotly.subplots import make_subplots
 import cv2
 
 

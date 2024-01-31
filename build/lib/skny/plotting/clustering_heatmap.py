@@ -1,7 +1,10 @@
 import plotly.graph_objects as go
 import plotly
+import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+import scipy.stats
+import numpy as np
 
 
 def clustering_heatmap(
@@ -93,7 +96,6 @@ def clustering_heatmap(
     plt.close() # not show
     # extract order of clustering
     row_order = g.dendrogram_row.reordered_ind
-    #df_grid_region_gene = df_grid_region_gene.apply(lambda x: scipy.stats.zscore(x), axis=1).iloc[row_order, :]
     df_grid_region_gene = df_grid_region_gene.iloc[row_order, :] # reorder by clustering
 
     ## Plotly code ----------------------------------------------------------------

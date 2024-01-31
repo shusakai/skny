@@ -1,9 +1,12 @@
 from scipy import stats
 from numpy import std, mean, sqrt
 import plotly.graph_objects as go
+import plotly.express as px
 import plotly
 import pandas as pd
 import seaborn as sns
+import numpy as np
+
 
 #correct if the population S.D. is expected to be equal for the two groups.
 def cohen_d(x,y):

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: skny
-Version: 0.2.5
+Version: 0.2.7
 Summary: Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
 Home-page: https://github.com/shusakai/skny
 Author: Shunsuke A. Sakai
@@ -69,6 +69,13 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 History
 =======
 
+
+0.2.7 (2024-01-31)
+------------------
+0.2.6 (2024-01-31)
+------------------
+
+* Practice of upload to PyPI.
 
 0.2.5 (2024-01-30)
 ------------------

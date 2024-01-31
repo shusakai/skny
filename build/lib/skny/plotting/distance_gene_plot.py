@@ -1,7 +1,10 @@
 import plotly.graph_objects as go
+import plotly.express as px
 import plotly
 import pandas as pd
 import seaborn as sns
+import numpy as np
+import scipy.stats
 
 
 def distance_gene_plot(
