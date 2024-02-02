@@ -73,6 +73,7 @@ def convert_indivisual_peri(grid):
 
     # Load region annotation dataframe
     df_shotest = grid.uns["shortest"]
+    df_shotest["right"] = df_shotest["region"].apply(lambda x: x.right)
     # merge to dataframe
     df_shotest = pd.merge(
         df_shotest, df_temp_solid, right_index=True, left_index=True, how="left"
