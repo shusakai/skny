@@ -4,5 +4,6 @@ plotly
 scipy
 seaborn
 opencv-python
+numba<=0.57.1
 numpy<1.22,>=1.18
 stlearn

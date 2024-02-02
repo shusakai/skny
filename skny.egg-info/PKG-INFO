@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: skny
-Version: 0.2.7
+Version: 0.2.8
 Summary: Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
 Home-page: https://github.com/shusakai/skny
 Author: Shunsuke A. Sakai
@@ -23,6 +23,7 @@ Requires-Dist: plotly
 Requires-Dist: scipy
 Requires-Dist: seaborn
 Requires-Dist: opencv-python
+Requires-Dist: numba<=0.57.1
 Requires-Dist: numpy<1.22,>=1.18
 Requires-Dist: stlearn
 
@@ -70,6 +71,8 @@ History
 =======
 
 
+0.2.8 (2024-02-01)
+------------------
 0.2.7 (2024-01-31)
 ------------------
 0.2.6 (2024-01-31)
