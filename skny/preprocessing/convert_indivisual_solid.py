@@ -83,10 +83,10 @@ def convert_indivisual_solid(grid):
     # generate annotation matrix of each tumor solid 
     df_solid_centroid = pd.DataFrame(
         centroids[df_solid.index], 
-        index=df_solid.index,
+        index=[f"solid_{str(int(i))}" for i in df_solid.index],
         columns=["imagecol", "imagerow"]
     )
-    df_solid_centroid["solid"] = df_solid_centroid.index
+    df_solid_centroid["solid"] = df_solid.index
     
     
     # create AnnData object of (−∞, 0] section of indivisual tumor solid ----------------------------
@@ -98,7 +98,7 @@ def convert_indivisual_solid(grid):
     }}})
     
     # add cell and gene name
-    solid.obs_names = df_solid.index.tolist()
+    solid.obs_names = [f"solid_{str(int(i))}" for i in df_solid.index]
     solid.var_names = df_solid.columns.tolist()
     
     # add centroid to metadata
