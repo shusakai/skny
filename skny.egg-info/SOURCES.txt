@@ -35,6 +35,8 @@ skny/plotting/distance_gene_plot.py
 skny/plotting/equidistant_curves.py
 skny/plotting/preprocessed_images.py
 skny/preprocessing/__init__.py
+skny/preprocessing/convert_indivisual_peri.py
+skny/preprocessing/convert_indivisual_solid.py
 skny/preprocessing/cv2pil.py
 skny/preprocessing/distance_calculator.py
 tests/__init__.py
