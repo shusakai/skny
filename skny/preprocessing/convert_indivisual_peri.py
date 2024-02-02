@@ -142,6 +142,6 @@ def convert_indivisual_peri(grid):
     solid_peri.uns["indivisual_tumor_solid"] = img_color
     solid_peri.uns["xor_result"] = xor_result
     # annotation of dataframe
-    solid_peri.uns["shortest"] =df_solid_centroid
+    solid_peri.uns["shortest"] = df_shotest
 
     return solid_peri
