@@ -1,11 +1,5 @@
-.. image:: https://img.shields.io/pypi/v/skny.svg
-        :target: https://pypi.python.org/pypi/skny
+|PyPI| |Downloads| |CI| |Docs| |Coverage| |Discourse| |Zulip| |NumFOCUS|
 
-.. image:: https://readthedocs.org/projects/skny/badge/?version=latest
-        :target: https://skny.readthedocs.io/en/latest/?version=latest
-        :alt: Documentation Status
-
-=====================
 SKNY
 =====================
 
