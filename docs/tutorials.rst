@@ -2,7 +2,7 @@
 Tutorials
 =====
 
-.. nbgallery::
-   :caption: Distance-base analysis:
+.. toctree::
+   :glob:
 
-   tutorials/Xenium_analysis
+   tutorials/*
