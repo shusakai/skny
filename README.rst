@@ -14,10 +14,11 @@ SKNY
         :alt: Documentation Status
 
 
-<p align="left">
-  <img src="https://skny.hgc.jp/images/SKYN_logo.svg"
-    alt="deepreg_logo" title="DeepReg" width="300"/>
-</p>
+.. image:: https://skny.hgc.jp/images/SKYN_logo.svg
+   :scale: 40%
+   :height: 100px
+   :width: 200px
+   :align: left
 
 
 Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
