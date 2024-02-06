@@ -119,9 +119,9 @@ def convert_indivisual_peri(grid):
     # generate annotation matrix of each tumor solid 
     df_solid_centroid = pd.DataFrame(
         centroids[[int(i) for i in df_solid.index]], 
-        index=[int(i) for i in df_solid.index],
+        index=[f"solid_{str(int(i))}" for i in df_solid.index],
         columns=["imagecol", "imagerow"])
-    df_solid_centroid["solid_peri"] = df_solid_centroid.index
+    df_solid_centroid["solid_peri"] = [int(i) for i in df_solid.index]
 
     
     # create AnnData object of (0, +30] section of indivisual tumor solid ----------------------------
@@ -133,7 +133,7 @@ def convert_indivisual_peri(grid):
     }}})
 
     # add cell and gene name
-    solid_peri.obs_names = df_solid.index.tolist()
+    solid_peri.obs_names = [f"solid_{str(int(i))}" for i in df_solid.index]
     solid_peri.var_names = df_solid.columns.tolist()
 
     # add centroid to metadata
