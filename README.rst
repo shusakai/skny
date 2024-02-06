@@ -6,9 +6,7 @@
         :alt: Documentation Status
 
 =====================
-.. image:: _images/SKYN_logo.svg
-   :target: _images/SKYN_logo.svg
-   :width: 30%
+SKNY
 =====================
 
 Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
