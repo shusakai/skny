@@ -12,9 +12,9 @@ SKNY - SpatialKNifeY
 It automatically contours the tumor based on the spatial omics expression data and calculates the distance from this contour to each coordinate in space.
 Using this distance data, SKNY performs two analyses: 
 
-1) a quantitative evaluation of the peripheral and intratumoral cells within a ROI, and 
+1. A quantitative evaluation of the peripheral and intratumoral cells.
 
-2) a "single tumor microenvironment analysis" with bulk gene expression within each contour.
+2. "Single tumor microenvironment analysis" with bulk gene expression within each contour.
 
 Also, AnnData object-based programming makes it compatible with scanpy, squidpy and stlearn.
 
