@@ -17,7 +17,7 @@ SKNY - Spatial omics analysis tools for tumor microenvironment
 SKNY automatically contours the tumor based on the expression data and calculates the distance from these contours to each coordinate in space.
 Using this distance data, we provide two analyses: 
 
-1. A quantitative evaluation of the peripheral and intratumoral cells.
+1. A quantitative evaluation of the peripheral and intratumoral gene expressions.
 
 2. "Single tumor microenvironment analysis" with bulk gene expression within each contour.
 
