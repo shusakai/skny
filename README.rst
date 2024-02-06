@@ -6,7 +6,7 @@ SKNY
 .. image:: https://img.shields.io/pypi/v/skny.svg
         :target: https://pypi.python.org/pypi/skny
 
-.. image:: https://img.shields.io/testpypi/v/skny.svg
+.. image:: https://img.shields.io/pypi/v/skny.svg
         :target: https://test.pypi.org/project/skny/
 
 .. image:: https://img.shields.io/travis/shusakai/skny.svg
