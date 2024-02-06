@@ -14,12 +14,13 @@ SKNY
 
 Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
 
-.. image:: _images/SKYN_logo.svg
-   :target: _images/SKYN_logo.svg
-
-
 * Free software: MIT license
 * Documentation: https://skny.readthedocs.io.
+
+
+.. image:: _images/SKYN_logo.svg
+   :target: _images/SKYN_logo.svg
+   :scale: 60
 
 
 Features
