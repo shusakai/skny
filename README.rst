@@ -22,7 +22,10 @@ Also, AnnData object-based programming makes it compatible with scanpy, squidpy 
    :target: https://skny.readthedocs.io
    :width: 30%
 
-* Free software: MIT licensed
+
+Tutorial
+--------
+
 * Documentation: https://skny.readthedocs.io.
 
 
