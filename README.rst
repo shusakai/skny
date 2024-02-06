@@ -21,7 +21,7 @@ Using this distance data, SKNY performs two analyses:
 
 2. "Single tumor microenvironment analysis" with bulk gene expression within each contour.
 
-Also, AnnData object-based programming makes it compatible with scanpy, squidpy and stlearn.
+Also, AnnData object-based programming makes it compatible with `scanpy`_, squidpy and stlearn.
 
 
 Tutorials
@@ -36,3 +36,6 @@ Citation
 * TODO
 
 
+
+
+.. _scanpy: https://scanpy.readthedocs.io/en/stable/
