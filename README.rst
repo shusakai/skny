@@ -15,12 +15,10 @@ SKNY
 
 
 
-I like this way
-
 .. raw:: html
 
-    <a href="https://www.google.com/">
-        <img src="https://img.shields.io/static/v1?&style=plastic&logo=appveyor&label=Google&message=link2google&color=FF0000" alt="No message"/></a>
+    <a href="https://skny.hgc.jp/images/SKYN_logo.svg">
+        <img src="https://skny.hgc.jp/images/SKYN_logo.svg" alt="No message"/></a>
 
 
 Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
