@@ -14,8 +14,8 @@ SKNY - Spatial omics analysis tools for tumor microenvironment
 
 
 **SKNY** (SpatialKNifeY) is a tools for spatial omics analysis of tumor microenvironment for multiple platform such as `Xenium`_, `CosMx`_, and `PhenoCycler`_. 
-It automatically contours the tumor based on the expression data and calculates the distance from these contours to each coordinate in space.
-Using this distance data, SKNY performs two analyses: 
+SKNY automatically contours the tumor based on the expression data and calculates the distance from these contours to each coordinate in space.
+Using this distance data, we provide two analyses: 
 
 1. A quantitative evaluation of the peripheral and intratumoral cells.
 
