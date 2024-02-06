@@ -8,9 +8,9 @@
         :target: https://skny.readthedocs.io/en/latest/?version=latest
         :alt: Documentation Status
 
-====
+=====================
 SKNY
-====
+=====================
 
 Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
 
