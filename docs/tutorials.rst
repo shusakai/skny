@@ -3,6 +3,7 @@ Tutorials
 =====
 
 .. toctree::
-   :glob:
+   :maxdepth: 2
+   :caption: Contents:
 
-   tutorials/*
+   tutorials/Xenium_analysis
