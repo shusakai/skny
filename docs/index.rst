@@ -8,6 +8,7 @@ Welcome to skny's documentation!
    readme
    installation
    usage
+   tutorials
    modules
    contributing
    authors
