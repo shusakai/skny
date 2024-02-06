@@ -6,6 +6,9 @@ SKNY
 .. image:: https://img.shields.io/pypi/v/skny.svg
         :target: https://pypi.python.org/pypi/skny
 
+.. image:: https://img.shields.io/pypi/v/skny.svg
+        :target: https://pypi.python.org/pypi/skny
+
 .. image:: https://img.shields.io/travis/shusakai/skny.svg
         :target: https://travis-ci.com/shusakai/skny
 
@@ -13,9 +16,8 @@ SKNY
         :target: https://skny.readthedocs.io/en/latest/?version=latest
         :alt: Documentation Status
 
-.. raw:: html
-
-    <object data="https://skny.hgc.jp/images/SKYN_logo.svg" type="image/svg+xml"></object>
+.. image:: _images/SKYN_logo.svg
+   :target: _images/SKYN_logo.svg
 
 
 Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
