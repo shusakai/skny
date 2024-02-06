@@ -21,7 +21,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-import skny
+#import skny
 #from recommonmark.parser import CommonMarkParser
 
 # -- General configuration ---------------------------------------------
