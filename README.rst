@@ -24,10 +24,10 @@ Using this distance data, we provide two analyses:
 Also, `anndata`_ object-based programming makes it compatible with `scanpy`_, `squidpy`_ and `stlearn`_.
 
 
-Tutorials
+Documentation
 --------
 
-* Documentation: https://skny.readthedocs.io.
+* https://skny.readthedocs.io.
 
 
 Citation
