@@ -40,8 +40,15 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx_rtd_theme', 
     'nbsphinx', 
-    'sphinx_charts.charts'
+    'sphinx_copybutton'
 ]
+
+# for plotly
+nbsphinx_requirejs_options = {
+	"src": "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js",
+	"integrity": "sha512-VCK7oF67GXNc+J7zsu5o57jtxhLA75nSMHGaq8Q8TCOxDj4nMDw5dhQZvm9Cd9RN+3zgcodqbKcRc9gyPP8a2w==",
+	"crossorigin": "anonymous"
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
