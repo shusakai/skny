@@ -8,9 +8,7 @@
 SKNY - SpatialKNifeY
 =====================
 
-SKNY provides spatial gene expression anlysis stratified by distance from tumor solid for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
-
-SKNY automatically contours the tumor based on the spatial omics expression data and calculates the distance from this contour to each coordinate in space.
+**SKNY** is a tools for spatial anlysis stratified by distance from tumor solid for multiple platform such as Xenium, CosMx, and PhenoCycler. it automatically contours the tumor based on the spatial omics expression data and calculates the distance from this contour to each coordinate in space.
 
 AnnData object-based programming makes it compatible with scanpy, squidpy and stlearn.
 
