@@ -13,7 +13,7 @@ SKNY - SpatialKNifeY
    :width: 30%
 
 
-**SKNY** is a tools for spatial anlysis stratified by distance from tumor for multiple platform such as Xenium, CosMx, and PhenoCycler. 
+**SKNY** is a tools for spatial anlysis stratified by distance from tumor for multiple platform such as `Xenium`_, `CosMx`_, and `PhenoCycler`_. 
 It automatically contours the tumor based on the expression data and calculates the distance from these contours to each coordinate in space.
 Using this distance data, SKNY performs two analyses: 
 
@@ -37,6 +37,12 @@ Citation
 
 
 
+
+.. _Xenium: https://www.10xgenomics.com/jp/platforms/xenium
+
+.. _CosMx: https://nanostring.com/products/cosmx-spatial-molecular-imager/
+
+.. _PhenoCycler: https://www.akoyabio.com/phenocycler/
 
 .. _anndata: https://anndata.readthedocs.io/en/latest/
 
