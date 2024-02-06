@@ -1,1 +1,8 @@
-.. include:: ./Tutorials/Xenium_analysis.rst
+=====
+Tutorials
+=====
+
+.. nbgallery::
+   :caption: Distance-base analysis:
+
+   tutorials/Xenium_analysis
