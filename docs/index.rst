@@ -13,7 +13,6 @@ Welcome to skny's documentation!
    contributing
    authors
    history
-   Xenium_analysis
 
 Indices and tables
 ==================
