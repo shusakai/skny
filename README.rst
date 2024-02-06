@@ -16,7 +16,7 @@ Spatial gene expression anlysis stratified by distance from tumor for multiple p
 
 
 .. image:: _images/SKYN_logo.svg
-   :target: _images/SKYN_logo.svg
+   :target: https://skny.readthedocs.io
    :width: 30%
 
 
