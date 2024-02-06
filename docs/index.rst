@@ -9,7 +9,6 @@ Welcome to skny's documentation!
    installation
    usage
    tutorials
-   notebooks/Xenium_analysis
    modules
    contributing
    authors

@@ -6,6 +6,7 @@ jupyter_sphinx
 nbclean
 nbformat
 nbsphinx
+sphinx-charts
 pygments
 recommonmark
 sphinx
