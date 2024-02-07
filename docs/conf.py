@@ -40,19 +40,22 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx_rtd_theme', 
     'nbsphinx', 
-    'sphinx_copybutton'
+    'sphinx_copybutton', 
+    "sphinx.ext.mathjax",  # Maths visualization
 ]
 
 # for plotly
-nbsphinx_prolog = r"""
-.. raw:: html
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script>require=requirejs;</script>
-
-
-"""
+# MathJax config
+# See https://github.com/spatialaudio/nbsphinx/issues/572#issuecomment-853389268
+mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+mathjax2_config = {
+    "tex2jax": {
+        "inlineMath": [["$", "$"], ["\\(", "\\)"]],
+        "processEscapes": True,
+        "ignoreClass": "document",
+        "processClass": "math|output_area",
+    }
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
