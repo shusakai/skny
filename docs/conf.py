@@ -24,6 +24,8 @@ sys.path.insert(0, os.path.abspath('..'))
 import skny
 #from recommonmark.parser import CommonMarkParser
 
+from sphinx.application import Sphinx
+
 # -- General configuration ---------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -126,6 +128,9 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# for display of plotly graph
+# See https://github.com/spatialaudio/nbsphinx/issues/128
 html_js_files = [
     "require.min.js",
     "custom.js",
@@ -194,3 +199,6 @@ texinfo_documents = [
 
 
 
+def setup(app: Sphinx) -> None:
+    app.add_css_file("css/custom.css")
+    app.add_css_file("css/nbsphinx.css")  # had to add this manually
