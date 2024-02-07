@@ -6,3 +6,4 @@ Tutorials
    :caption: Contents:
 
    notebooks/Xenium_analysis
+   notebooks/Xenium_TIL
