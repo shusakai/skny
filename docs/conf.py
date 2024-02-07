@@ -57,6 +57,12 @@ mathjax2_config = {
     }
 }
 
+myst_update_mathjax = False
+
+myst_enable_extensions = [
+    "substitution",
+]
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
