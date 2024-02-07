@@ -136,7 +136,7 @@ def clustering_heatmap(
         ticktext=x_col  # ラベルのリスト
     )
     fig.update_layout(title='Clustering based on transcript density of each region')
-    fig.update_layout(xaxis=dict(title='Region'), width=1000, height=1000,)
+    fig.update_layout(xaxis=dict(title='Region'), height=800,)
     fig.show()
 
     #plotly.io.write_html(fig, "grid_region_gene_std.html")
