@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: skny
-Version: 0.2.11
+Version: 0.2.12
 Summary: Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
 Home-page: https://github.com/shusakai/skny
 Author: Shunsuke A. Sakai
@@ -27,44 +27,59 @@ Requires-Dist: numba<=0.57.1
 Requires-Dist: numpy<1.22,>=1.18
 Requires-Dist: stlearn
 
-====
-SKNY
-====
-
-
 .. image:: https://img.shields.io/pypi/v/skny.svg
         :target: https://pypi.python.org/pypi/skny
-
-.. image:: https://img.shields.io/travis/shusakai/skny.svg
-        :target: https://travis-ci.com/shusakai/skny
 
 .. image:: https://readthedocs.org/projects/skny/badge/?version=latest
         :target: https://skny.readthedocs.io/en/latest/?version=latest
         :alt: Documentation Status
 
+SKNY - Spatial omics analysis tools for tumor microenvironment 
+==================================================================================== 
+
+.. image:: _images/SKYN_logo.svg
+   :target: https://skny.readthedocs.io
+   :width: 30%
 
 
+**SKNY** (SpatialKNifeY) is a tools for spatial omics analysis of tumor microenvironment for multiple platform such as `Xenium`_, `CosMx`_, and `PhenoCycler`_. 
+SKNY automatically contours the tumor based on the expression data and calculates the distance from these contours to each coordinate in space.
+Using this distance data, we provide two analyses: 
 
-Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.
+1. A quantitative evaluation of the peri- and intra-tumoral gene expressions.
+
+2. "Single tumor microenvironment analysis" with bulk gene expression within each contour.
+
+Also, `anndata`_ object-based programming makes it compatible with `scanpy`_, `squidpy`_ and `stlearn`_.
 
 
-* Free software: MIT license
-* Documentation: https://skny.readthedocs.io.
+Documentation
+----------------
+
+* https://skny.readthedocs.io.
 
 
-Features
---------
+Citation
+----------------
 
 * TODO
 
-Credits
--------
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
 
+.. _Xenium: https://www.10xgenomics.com/jp/platforms/xenium
+
+.. _CosMx: https://nanostring.com/products/cosmx-spatial-molecular-imager/
+
+.. _PhenoCycler: https://www.akoyabio.com/phenocycler/
+
+.. _anndata: https://anndata.readthedocs.io/en/latest/
+
+.. _scanpy: https://scanpy.readthedocs.io/en/stable/
+
+.. _squidpy: https://squidpy.readthedocs.io/en/stable/
+
+.. _stlearn: https://stlearn.readthedocs.io/en/latest/
 
 =======
 History

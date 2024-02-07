@@ -5,7 +5,7 @@ import cv2
 
 
 def equidistant_curves(
-    grid, figsize=(1000, 1000)
+    grid, figsize=(None, None)
 ):
 
     data = grid.uns["shotest_30_delineation"]

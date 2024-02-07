@@ -6,7 +6,7 @@
         :alt: Documentation Status
 
 SKNY - Spatial omics analysis tools for tumor microenvironment 
-=====================
+==================================================================================== 
 
 .. image:: _images/SKYN_logo.svg
    :target: https://skny.readthedocs.io
@@ -25,13 +25,13 @@ Also, `anndata`_ object-based programming makes it compatible with `scanpy`_, `s
 
 
 Documentation
---------
+----------------
 
 * https://skny.readthedocs.io.
 
 
 Citation
---------
+----------------
 
 * TODO
 
