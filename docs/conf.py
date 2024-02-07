@@ -201,4 +201,4 @@ texinfo_documents = [
 
 def setup(app: Sphinx) -> None:
     app.add_css_file("css/custom.css")
-    app.add_css_file("css/nbsphinx.css")  # had to add this manually
+    #app.add_css_file("css/nbsphinx.css")  # had to add this manually

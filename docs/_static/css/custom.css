@@ -1,3 +1,7 @@
 .wy-nav-content {
     max-width: 950px;
 }
+
+div.highlight {
+    background-color: #f0f0f0; /* 任意の背景色に変更 */
+}
