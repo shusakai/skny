@@ -72,7 +72,8 @@ def convert_indivisual_peri(grid):
     )
 
     # Load region annotation dataframe
-    df_shotest = grid.uns["shortest"]
+    #df_shotest = grid.uns["shortest"]
+    df_shotest = getattr(grid, "shortest")
     df_shotest["right"] = df_shotest["region"].apply(lambda x: x.right)
     # merge to dataframe
     df_shotest = pd.merge(
@@ -143,6 +144,7 @@ def convert_indivisual_peri(grid):
     solid_peri.uns["indivisual_tumor_solid"] = img_color
     solid_peri.uns["xor_result"] = xor_result
     # annotation of dataframe
-    solid_peri.uns["shortest"] = df_shotest
+    #solid_peri.uns["shortest"] = df_shotest
+    setattr(solid_peri, 'shortest', df_shotest)
 
     return solid_peri

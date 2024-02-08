@@ -17,7 +17,6 @@ docs/installation.rst
 docs/make.bat
 docs/readme.rst
 docs/tutorials.rst
-docs/notebooks/Xenium_TIL.ipynb
 docs/notebooks/Xenium_analysis.ipynb
 skny/__init__.py
 skny/cli.py

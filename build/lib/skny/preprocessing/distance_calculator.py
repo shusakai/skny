@@ -304,6 +304,7 @@ def calculate_distance(grid, pos_marker_ls, neg_marker_ls=None):
         grid.uns[f"shotest_region_{i}_delineation"] = col_arr # add to grid object
     
     # annotation of dataframe of shortest distance from surface
-    grid.uns["shortest"] = df_shotest
+    #grid.uns["shortest"] = df_shotest
+    setattr(grid, 'shortest', df_shotest)
 
     return grid
