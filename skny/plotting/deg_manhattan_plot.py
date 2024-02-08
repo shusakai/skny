@@ -50,12 +50,14 @@ def deg_manhattan_plot(
 
     # If it has already been calculated -----------------------------------------------
     if name in grid.uns.keys():
-       df_q_res = grid.uns[name]
+       #df_q_res = grid.uns[name]
+       df_q_res = getattr(grid, name)
         
     else:
     
         ## Load shortest path and gene expression -------------------------------------
-        df_shotest = grid.uns["shortest"]
+        #df_shotest = grid.uns["shortest"]
+        df_shotest = getattr(grid, "shortest")
         df_grid = grid.to_df()
         
         # complement nan grid

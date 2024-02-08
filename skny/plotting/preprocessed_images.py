@@ -15,7 +15,8 @@ def preprocessed_images(
     '''
 
     # Load data -----------------------------
-    df_shotest = grid.uns["shortest"]
+    #df_shotest = grid.uns["shortest"]
+    df_shotest = getattr(grid, "shortest")
     
     # list 
     image_ls = [

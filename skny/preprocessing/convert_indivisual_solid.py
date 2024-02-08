@@ -30,7 +30,8 @@ def convert_indivisual_solid(grid):
             cv2.putText(img_color, f"{i}", (x, y), cv2.FONT_HERSHEY_PLAIN, 0.8, (0, 0, 255), 1, cv2.LINE_8)
     
     # Load region annotation dataframe
-    df_shotest = grid.uns["shortest"]
+    #df_shotest = grid.uns["shortest"]
+    df_shotest = getattr(grid, "shortest")
     df_shotest["right"] = df_shotest["region"].apply(lambda x: x.right)
     
     # convert to dataframe
@@ -107,6 +108,7 @@ def convert_indivisual_solid(grid):
     # annotation processing image to AnnData object ------------------------------------
     solid.uns["indivisual_tumor_solid"] = img_color
     # annotation of dataframe
-    solid.uns["shortest"] = df_shotest
+    #solid.uns["shortest"] = df_shotest
+    setattr(solid, 'shortest', df_shotest)
 
     return solid

@@ -32,11 +32,13 @@ def clustering_heatmap(
 
     # If it has already been calculated -----------------------------------------------
     if name in grid.uns.keys():
-        df_grid_region_gene = grid.uns[name]
+        #df_grid_region_gene = grid.uns[name]
+        df_grid_region_gene = getattr(grid, name)
     else:
         
         ## Merge shortest path and count of gene -------------------------------------
-        df_shotest = grid.uns["shortest"]
+        #df_shotest = grid.uns["shortest"]
+        df_shotest = getattr(grid, "shortest")
         df_grid = grid.to_df()
         
         # complement nan grid
@@ -76,7 +78,8 @@ def clustering_heatmap(
         df_grid_region_gene = df_grid_region_gene.T.sort_index().T
     
         ## Save in uns----------------------------------------------------------------
-        grid.uns[name] = df_grid_region_gene
+        #grid.uns[name] = df_grid_region_gene
+        setattr(grid, name, df_grid_region_gene)
     
     
     # Clustering ---------------------------------------------------------------
