@@ -3,7 +3,7 @@ pandas
 plotly
 scipy
 seaborn
-opencv-python
+opencv-python==4.8.1
 numba<=0.57.1
 numpy>=1.18,<1.22
 stlearn

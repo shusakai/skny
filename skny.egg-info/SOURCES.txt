@@ -18,6 +18,7 @@ docs/make.bat
 docs/readme.rst
 docs/tutorials.rst
 docs/notebooks/Xenium_analysis.ipynb
+docs/notebooks/single-TME_analysis.ipynb
 skny/__init__.py
 skny/cli.py
 skny/pl.py

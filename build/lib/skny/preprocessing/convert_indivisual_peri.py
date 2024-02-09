@@ -65,16 +65,17 @@ def convert_indivisual_peri(grid):
     # convert to matrix to vector
     solid_peri = solid_peri.reshape(N_COL, N_ROW).reshape(N_ROW * N_COL)
 
+    # Load region annotation dataframe
+    #df_shotest = grid.uns["shortest"]
+    df_shotest = getattr(grid, "shortest")
+    df_shotest["right"] = df_shotest["region"].apply(lambda x: x.right)
+
     # dataframe
     df_temp_solid = pd.DataFrame(
         solid_peri, 
         index=df_shotest.index, columns=["solid_peri"]
     )
 
-    # Load region annotation dataframe
-    #df_shotest = grid.uns["shortest"]
-    df_shotest = getattr(grid, "shortest")
-    df_shotest["right"] = df_shotest["region"].apply(lambda x: x.right)
     # merge to dataframe
     df_shotest = pd.merge(
         df_shotest, df_temp_solid, right_index=True, left_index=True, how="left"
