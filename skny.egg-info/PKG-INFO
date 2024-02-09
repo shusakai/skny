@@ -22,7 +22,7 @@ Requires-Dist: pandas
 Requires-Dist: plotly
 Requires-Dist: scipy
 Requires-Dist: seaborn
-Requires-Dist: opencv-python
+Requires-Dist: opencv-python==4.8.1
 Requires-Dist: numba<=0.57.1
 Requires-Dist: numpy<1.22,>=1.18
 Requires-Dist: stlearn
