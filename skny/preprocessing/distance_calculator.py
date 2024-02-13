@@ -235,19 +235,19 @@ def calculate_distance(grid, pos_marker_ls, neg_marker_ls=None):
     #return grid
     
     ## Color scale of distance from surface ------------------------
-    fig, ax = plt.subplots(figsize=(N_COL, N_ROW), dpi=1, tight_layout=True)
-    cmap = matplotlib.cm.Spectral
-    cmap.set_bad('black',1.)
-    cmap.set_under(color='black') 
-    elev_min=df_shotest["euclidean"].min()
-    elev_max=df_shotest["euclidean"].max()
-    mid_val=0
+    #fig, ax = plt.subplots(figsize=(N_COL, N_ROW), dpi=1, tight_layout=True)
+    #cmap = matplotlib.cm.Spectral
+    #cmap.set_bad('black',1.)
+    #cmap.set_under(color='black') 
+    #elev_min=df_shotest["euclidean"].min()
+    #elev_max=df_shotest["euclidean"].max()
+    #mid_val=0
     
-    ax.imshow(
-        np.array(df_shotest["euclidean"]).reshape(N_ROW, N_COL), cmap=cmap, 
-        clim=(elev_min, elev_max), norm=MidpointNormalize(midpoint=mid_val,vmin=elev_min, vmax=elev_max)
-    )
-    ax.axis('off')
+    #ax.imshow(
+    #    np.array(df_shotest["euclidean"]).reshape(N_ROW, N_COL), cmap=cmap, 
+    #    clim=(elev_min, elev_max), norm=MidpointNormalize(midpoint=mid_val,vmin=elev_min, vmax=elev_max)
+    #)
+    #ax.axis('off')
     
     # convert from fig to numpy
     fig.canvas.draw()
