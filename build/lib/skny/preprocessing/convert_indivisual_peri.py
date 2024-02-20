@@ -16,7 +16,7 @@ def convert_indivisual_peri(grid, section=30):
     if section not in [30, 60, 90, 120, 150]:
         return "section must be 30, 60, 90, 120, or 150"
     
-    section = section / 10
+    section = int(section / 10)
 
     # show separation of indivisual tumor solid using rectangle -------------------------------------------
     # load contour image from skny object
