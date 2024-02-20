@@ -4,13 +4,19 @@ import anndata as ad
 import scanpy as sc
 import cv2
 
-def convert_indivisual_peri(grid):
+def convert_indivisual_peri(grid, section=30):
     '''
     grid: AnnData after `distance_calculator`
+    section: int (30, 60, 90, 120, or 150)
     '''
     ## get col and row length data from grid object --------------------------
     N_ROW = len(grid.uns["grid_yedges"]) - 1
     N_COL = len(grid.uns["grid_xedges"]) - 1
+
+    if section not in [30, 60, 90, 120, 150]:
+        return "section must be 30, 60, 90, 120, or 150"
+    
+    section = section / 10
 
     # show separation of indivisual tumor solid using rectangle -------------------------------------------
     # load contour image from skny object
@@ -24,7 +30,7 @@ def convert_indivisual_peri(grid):
     for i in range(1, retval):
         x, y, width, height, area = stats[i] # extract regtangle information
         if area > 10: # exclude area<100μm^2
-            cv2.rectangle(img_color, (x - 3, y - 3), (x+width+3, y+height+3), (0, 0, 255), thickness=1)
+            cv2.rectangle(img_color, (x - section, y - section), (x+width+section, y+height+section), (0, 0, 255), thickness=1)
 
             
     # take all-region-XOR based on all rectangle ---------------------------------
@@ -33,7 +39,7 @@ def convert_indivisual_peri(grid):
         x, y, width, height, area = stats[i] # extract regtangle information
         if area > 10: # exclude area<100μm^2
             image = np.zeros((N_ROW, N_COL), dtype=np.uint8) * 255 # generate zero matrix of same size
-            cv2.rectangle(image, (x - 3, y - 3), (x+width+3, y+height+3), 255, thickness=-1) # delineate rectangle
+            cv2.rectangle(image, (x - section, y - section), (x+width+section, y+height+section), 255, thickness=-1) # delineate rectangle
             
             # rectangle is added to zero matrix
             if xor_result is None:
@@ -53,7 +59,7 @@ def convert_indivisual_peri(grid):
         x, y, width, height, area = stats[i] # extract regtangle information
         if area > 10: # exclude area<100μm^2
             image = np.zeros((N_ROW, N_COL), dtype=np.uint8) * 255 # generate zero matrix of same size
-            cv2.rectangle(image, (x - 3, y - 3), (x+width+3, y+height+3), 255, thickness=-1) # delineate rectangle
+            cv2.rectangle(image, (x - section, y - section), (x+width+section, y+height+section), 255, thickness=-1) # delineate rectangle
             and_result = cv2.bitwise_and(xor_result, image) # AND
 
             # white value (255) is converted to rectangle label, and these labels on coodinate added to zero matrix
@@ -85,7 +91,7 @@ def convert_indivisual_peri(grid):
     # extract (0, +30] section from XOR region of indivisual tumor solid ----------------------------------------
     solid_peri_ls = [] # place holder
     for i, s in zip(df_shotest["right"], df_shotest["solid_peri"]):
-        if (i != 3 ) & (s != 0 ): # select XOR regeion and (0, +30] section 
+        if (i != section ) & (s != 0 ): # select XOR regeion and (0, +30] section 
             solid_peri_ls += [0]
         else:
             solid_peri_ls += [s]
