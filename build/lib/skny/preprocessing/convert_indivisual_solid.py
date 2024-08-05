@@ -5,14 +5,24 @@ import scanpy as sc
 import cv2
 
 
-def convert_indivisual_solid(grid):
+def convert_indivisual_solid(grid, section=None):
     '''
     grid: AnnData after `distance_calculator`
+    section: int (0, -30, -60, -90, or -120)
     '''
     
     ## get col and row length data from grid object --------------------------
     N_ROW = len(grid.uns["grid_yedges"]) - 1
     N_COL = len(grid.uns["grid_xedges"]) - 1
+
+    if section in [0, -30, -60, -90, -120]:
+        section = int(section / 10)
+
+    elif section is None:
+        print("Calculatting gene expression of (-∞, 0]")
+    
+    else:
+        return "Section must be 0, -30, -60, -90, or -120"
     
     # show separation of indivisual tumor solid using rectangle -------------------------------------------
     # load contour image from skny object
@@ -47,11 +57,20 @@ def convert_indivisual_solid(grid):
     
     # extract (−∞, 0] section from indivisual tumor solid ----------------------------------------
     solid_ls = []
-    for i, s in zip(df_shotest["right"], df_shotest["solid"]):
-        if (i > 0 ) & (s != 0 ): # select solid regeion and (−∞, 0] section 
-            solid_ls += [0]
-        else:
-            solid_ls += [s]
+    if section is None:
+        for i, s in zip(df_shotest["right"], df_shotest["solid"]):
+            if (i > 0 ) & (s != 0 ): # select solid regeion and (−∞, 0] section 
+                solid_ls += [0]
+            else:
+                solid_ls += [s]
+
+    else:
+        for i, s in zip(df_shotest["right"], df_shotest["solid"]):
+            if (i != section ) & (s != 0 ): # selected section 
+                solid_ls += [0]
+            else:
+                solid_ls += [s]
+
     # add to dataframe
     df_shotest["solid"] = solid_ls
     
