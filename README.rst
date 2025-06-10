@@ -23,6 +23,9 @@ Using this distance data, we provide two analyses:
 
 Also, `anndata`_ object-based programming makes it compatible with `scanpy`_, `squidpy`_ and `stlearn`_.
 
+**Recommended Python version:**  
+We recommend using Python 3.8 or 3.9 to ensure compatibility.
+
 
 Documentation
 ----------------
