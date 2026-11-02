@@ -12,8 +12,7 @@ To install skny, run this command in your terminal:
 
 .. code-block:: console
 
-    $ # pip install skny
-    $ pip install --extra-index-url https://test.pypi.org/simple/ skny
+    $ pip install skny
 
 This is the preferred method to install skny, as it will always install the most recent stable release.
 

@@ -156,8 +156,7 @@ def calculate_region(
         Key of ``adata.obsm`` holding (x, y) coordinates in um (used when ``coord_keys`` is None).
     coord_keys : tuple of str or None
         Alternatively, two ``obs`` columns with x and y in um.
-    bin_um, nest_radius, margin, min_nest_cells, min_ref_cells, tissue_smooth,
-    tissue_min_density, min_tissue_area, core_only, margin_from
+    bin_um, nest_radius, margin, min_nest_cells, min_ref_cells, tissue_smooth, tissue_min_density, min_tissue_area, core_only, margin_from
         See :func:`regions_from_coords`.
     key_added : str
         ``obs[key_added]`` receives the region label (``core`` / ``margin`` / ``dist`` /
@@ -182,7 +181,11 @@ def calculate_region(
         if spatial_key not in adata.obsm:
             raise KeyError(f"obsm['{spatial_key}'] not found; pass coord_keys=(x_col, y_col) instead")
         xy = np.asarray(adata.obsm[spatial_key], float)[:, :2]
+    if not np.isfinite(xy).all():
+        raise ValueError(f"{int((~np.isfinite(xy).all(1)).sum())} cells have missing / non-finite coordinates")
     is_ref = adata.obs[label_key].astype(str).isin([str(v) for v in ref_label]).to_numpy()
+    if is_ref.sum() == 0:
+        raise ValueError(f"no cell has obs['{label_key}'] in {list(map(str, ref_label))}")
     samples = adata.obs[sample_key].astype(str).to_numpy() if sample_key is not None else np.array(["sample"] * adata.n_obs)
     params = dict(
         ref_label=list(map(str, ref_label)), label_key=label_key, sample_key=sample_key, bin_um=float(bin_um),

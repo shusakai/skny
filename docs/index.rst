@@ -8,7 +8,8 @@ Welcome to skny's documentation!
    readme
    installation
    tutorials
-   modules
+   region_analysis
+   api
    contributing
    authors
    history
