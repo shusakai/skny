@@ -29,8 +29,9 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
     ],
     description="Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.",
     entry_points={
@@ -49,6 +50,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/shusakai/skny',
-    version='0.2.20',
+    version='0.3.0',
     zip_safe=False,
 )

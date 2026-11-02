@@ -2,6 +2,17 @@
 History
 =======
 
+0.3.0 (2026-11-02)
+------------------
+
+* New cell-label based region analysis (a variant of ``calculate_distance`` that works on
+  cell-level AnnData instead of marker expression on a grid):
+  ``skny.pp.calculate_region`` (tumor ``core`` / ``margin`` / ``dist`` from the Euclidean
+  distance to the nearest reference cell, with an all-cell tissue mask),
+  ``skny.pp.region_density`` (cells / mm^2 of any cell group per region),
+  ``skny.pl.region_map`` and ``skny.pl.region_density_plot``.
+* Tutorial ``notebooks/region_analysis`` and unit tests ``tests/test_region.py``.
+
 
 0.2.16 (2024-02-14)
 -----------------------

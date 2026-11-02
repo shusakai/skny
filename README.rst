@@ -21,6 +21,22 @@ Using this distance data, we provide two analyses:
 
 2. "Single tumor microenvironment analysis" with bulk gene expression within each contour.
 
+Since v0.3.0 SKNY also provides a **cell-label based variant** (``skny.pp.calculate_region``) for
+cell-level data with annotated cell types (e.g. scanpy / Xenium 5K): the tumor is defined by a cell
+label such as ``"Malignant"`` and every cell is assigned to the tumor ``core`` (within 15 um of a
+tumor cell), the peri-tumoral ``margin`` (stroma within 100 um of the core) or ``dist`` (farther
+tissue), with an all-cell tissue mask so that empty space is never counted. ``skny.pp.region_density``
+then gives the density (cells / mm^2) of any cell group (e.g. immune subtypes) per region, and
+``skny.pl.region_map`` / ``skny.pl.region_density_plot`` draw the results.
+
+.. code-block:: python
+
+   import skny as sk
+   sk.pp.calculate_region(adata, "Malignant", label_key="cell_type", sample_key="sample")  # coordinates in um in adata.obsm["spatial"]
+   df = sk.pp.region_density(adata, "immune_subtype", sample_key="sample")
+   sk.pl.region_map(adata, sample="S1", highlight=["T cell", "Myeloid"])
+   sk.pl.region_density_plot(df, groups=["CD8+ T", "Treg", "M2-like"])
+
 Also, `anndata`_ object-based programming makes it compatible with `scanpy`_, `squidpy`_ and `stlearn`_.
 
 **Recommended Python version:**  

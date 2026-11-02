@@ -8,3 +8,4 @@ Tutorials
    notebooks/Xenium_analysis
    notebooks/single-TME_analysis
    notebooks/SKNY_paper_Sakai_et_al
+   notebooks/region_analysis
