@@ -1,4 +1,3 @@
--r ../requirements.txt
 ipyvolume
 ipywebrtc
 ipywidgets
@@ -13,4 +12,7 @@ sphinx_copybutton==0.3.1
 sphinx-autodoc-typehints
 sphinx_gallery==0.10.1
 sphinx_rtd_theme
-typing_extensions
+typing_extensionsnumpy
+pandas
+scipy
+matplotlib

@@ -67,7 +67,6 @@ myst_update_mathjax = False
 # Heavy / optional dependencies are mocked so that autodoc can import skny on Read the Docs.
 autodoc_mock_imports = [
     "stlearn", "scanpy", "anndata", "cv2", "plotly", "networkx", "seaborn", "numba", "PIL",
-    "numpy", "pandas", "scipy", "matplotlib",
 ]
 autodoc_member_order = "bysource"
 nbsphinx_execute = "never"
