@@ -1,13 +1,35 @@
-=====================================================
-Tumor core / margin / dist from cell-type labels
-=====================================================
+======================================
+Workflow 2: tumor core / margin / dist
+======================================
 
-Since v0.3.0 SKNY provides a second way to define tumor regions. The original
-:func:`skny.pp.calculate_distance` contours the tumor from **marker gene expression** on a
-10 µm grid and reports equidistant bands around the contour. The new
+Since v0.3.0 SKNY provides a second, contour-free way to define tumor regions.
 :func:`skny.pp.calculate_region` works on **cell-level** data (one row per cell, e.g. a scanpy
 object) whose cells have already been annotated, and defines the tumor from a **cell label**
-such as ``"Malignant"``.
+such as ``"Malignant"``. Every cell is assigned to ``core`` / ``margin`` / ``dist`` and
+:func:`skny.pp.region_density` turns that into cell densities (cells / mm²) per region and
+sample. Compare with workflow 1 (:doc:`workflow_contour`), which contours the tumor on a
+10 µm grid and reports expression as a function of the distance from the contour; see
+:doc:`workflows` for when to use which.
+
+Steps
+-----
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - step
+     - function
+   * - 1. Annotated cells
+     - any ``AnnData`` with a cell-type column in ``obs`` and coordinates in micrometres
+       (``obsm["spatial"]`` or two ``obs`` columns)
+   * - 2. Regions
+     - :func:`skny.pp.calculate_region` (per sample with ``sample_key``);
+       :func:`skny.pp.regions_from_coords` for plain coordinate arrays
+   * - 3. Densities
+     - :func:`skny.pp.region_density`: cells / mm² of each group in each region
+   * - 4. Plots
+     - :func:`skny.pl.region_map`, :func:`skny.pl.region_density_plot`
 
 Definitions
 -----------
@@ -75,5 +97,11 @@ The group ``_all_cells`` gives the total cell density of the region. Regions who
 ``min_area_mm2`` are hatched in :func:`skny.pl.region_density_plot` instead of showing an unstable
 density.
 
-See the tutorial :doc:`notebooks/region_analysis` for a complete example on the 10x Xenium
-breast cancer dataset, and :doc:`api` for all parameters.
+Tutorial
+--------
+
+* :doc:`notebooks/region_analysis` - complete example on the 10x Xenium breast cancer dataset
+  (annotation with scanpy, regions, densities per region)
+
+The same annotation can also drive workflow 1 (:doc:`notebooks/label_based_contour`).
+See :doc:`api` for all parameters.

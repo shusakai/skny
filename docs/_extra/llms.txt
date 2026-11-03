@@ -92,8 +92,14 @@ returns the region map for custom pipelines.
 
 ## Tutorials
 
-- https://skny.readthedocs.io/en/latest/notebooks/Xenium_analysis.html
-- https://skny.readthedocs.io/en/latest/notebooks/single-TME_analysis.html
-- https://skny.readthedocs.io/en/latest/notebooks/region_analysis.html (core/margin/dist + label-defined contour)
+Which workflow: https://skny.readthedocs.io/en/latest/workflows.html
+
+Workflow 1 (grid, tumor contour, distance bands; https://skny.readthedocs.io/en/latest/workflow_contour.html):
+- https://skny.readthedocs.io/en/latest/notebooks/Xenium_analysis.html (marker genes, end to end)
+- https://skny.readthedocs.io/en/latest/notebooks/label_based_contour.html (same workflow from a cell-type annotation: use_label / pos_label_ls)
 - https://skny.readthedocs.io/en/latest/notebooks/image_processing_options.html (filters / threshold / apply_filters)
+- https://skny.readthedocs.io/en/latest/notebooks/single-TME_analysis.html (per tumor nest)
 - https://skny.readthedocs.io/en/latest/notebooks/SKNY_paper_Sakai_et_al.html
+
+Workflow 2 (cells, core / margin / dist, density; https://skny.readthedocs.io/en/latest/workflow_region.html):
+- https://skny.readthedocs.io/en/latest/notebooks/region_analysis.html

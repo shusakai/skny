@@ -31,6 +31,9 @@ skny/
   plotting/              # one file per sk.pl function
 tests/                   # pytest / unittest (tests/test_region.py covers the cell-label workflow)
 docs/                    # Sphinx (Read the Docs), tutorials in docs/notebooks/*.ipynb
+  index.rst                    # sidebar: Getting started / Workflow 1 / Workflow 2 / Reference
+  workflows.rst                # "which workflow" comparison; workflow_contour.rst, workflow_region.rst = overviews
+  api.rst                      # public functions grouped by workflow
 ```
 
 Public API = everything imported in `skny/pp.py` and `skny/pl.py`. Function names containing
@@ -73,7 +76,10 @@ cd docs && make html                    # requires pandoc; notebooks are not exe
 `tests/test_region.py` covers workflow 2. Run the suite on the oldest (3.8) and newest Python you
 have: the code must work with numpy 1.x and 2.x, pandas 1.5 and 3.x.
 
-The Xenium tutorials download public 10x data (see the first cells of each notebook).
+The Xenium tutorials download public 10x data (see the first cells of each notebook). Keep the docs
+organised by workflow: a new tutorial goes into the toctree of its workflow in `docs/index.rst`
+(workflow 1 = grid / contour, workflow 2 = cell regions) and a new public function into the matching
+section of `docs/api.rst`.
 
 ## Versioning and release
 

@@ -165,11 +165,13 @@ Documentation and tutorials
 * Documentation: https://skny.readthedocs.io
 * Tutorials (Jupyter notebooks, public 10x Xenium breast cancer data):
 
-  * `Xenium analysis`_ - workflow 1 end to end
-  * `Single-TME analysis`_ - per-tumor-nest analysis
-  * `Region analysis`_ - workflow 2 (core / margin / dist, cell density) and label-defined contours
-  * `Image-processing options`_ - choosing the smoothing of the tumor contour (``filters`` / ``threshold``)
-  * `Reproduction of the paper figures`_
+  * Workflow 1 (tumor contour, grid): `Xenium analysis`_ (marker genes, end to end),
+    `Label-based contour`_ (same workflow from a cell-type annotation),
+    `Image-processing options`_ (``filters`` / ``threshold``),
+    `Single-TME analysis`_ (per tumor nest), `Reproduction of the paper figures`_
+  * Workflow 2 (core / margin / dist, cells): `Region analysis`_ (regions and cell density per region)
+
+* `Which workflow should I use?`_
 
 * API reference: https://skny.readthedocs.io/en/latest/api.html
 * Machine-readable summary for coding assistants: `llms.txt`_ and `AGENTS.md`_
@@ -223,6 +225,8 @@ MIT. See `LICENSE`_.
 .. _Xenium analysis: https://skny.readthedocs.io/en/latest/notebooks/Xenium_analysis.html
 .. _Single-TME analysis: https://skny.readthedocs.io/en/latest/notebooks/single-TME_analysis.html
 .. _Region analysis: https://skny.readthedocs.io/en/latest/notebooks/region_analysis.html
+.. _Label-based contour: https://skny.readthedocs.io/en/latest/notebooks/label_based_contour.html
+.. _Which workflow should I use?: https://skny.readthedocs.io/en/latest/workflows.html
 .. _Image-processing options: https://skny.readthedocs.io/en/latest/notebooks/image_processing_options.html
 .. _Reproduction of the paper figures: https://skny.readthedocs.io/en/latest/notebooks/SKNY_paper_Sakai_et_al.html
 .. _llms.txt: https://github.com/shusakai/skny/blob/main/llms.txt
