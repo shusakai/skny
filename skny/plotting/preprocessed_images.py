@@ -9,10 +9,23 @@ import math
 def preprocessed_images(
     grid, figsize=(None, None)
 ):
-    '''
-    grid: AnnData
-    figsize: tupple
-    '''
+    """Show the image-processing steps of :func:`skny.pp.calculate_distance` (plotly).
+
+    Panels: tumor marker mask, median-filtered mask, contour (delineation), equidistant
+    curves, and one panel per 30 um distance band that contains more than 100 bins.
+
+    Parameters
+    ----------
+    grid : AnnData
+        Output of :func:`skny.pp.calculate_distance`.
+    figsize : tuple of (height, width) in pixels or None
+        Passed to ``plotly`` ``update_layout``; e.g. ``(800, None)``.
+
+    Returns
+    -------
+    None
+        The interactive figure is displayed with ``fig.show()``.
+    """
 
     # Load data -----------------------------
     #df_shotest = grid.uns["shortest"]

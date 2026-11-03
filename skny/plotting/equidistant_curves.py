@@ -7,6 +7,20 @@ import cv2
 def equidistant_curves(
     grid, figsize=(None, None)
 ):
+    """Show the tumor contour with equidistant curves every 30 um (plotly).
+
+    Parameters
+    ----------
+    grid : AnnData
+        Output of :func:`skny.pp.calculate_distance`.
+    figsize : tuple of (height, width) in pixels or None
+        e.g. ``(500, None)``.
+
+    Returns
+    -------
+    None
+        The interactive figure is displayed with ``fig.show()``.
+    """
 
     data = grid.uns["shotest_30_delineation"]
     

@@ -185,7 +185,11 @@ def calculate_region(
         raise ValueError(f"{int((~np.isfinite(xy).all(1)).sum())} cells have missing / non-finite coordinates")
     is_ref = adata.obs[label_key].astype(str).isin([str(v) for v in ref_label]).to_numpy()
     if is_ref.sum() == 0:
-        raise ValueError(f"no cell has obs['{label_key}'] in {list(map(str, ref_label))}")
+        import warnings
+        warnings.warn(
+            f"no cell has obs['{label_key}'] in {list(map(str, ref_label))}; "
+            f"all cells are set to '{NOT_COMPUTED}'", stacklevel=2,
+        )
     samples = adata.obs[sample_key].astype(str).to_numpy() if sample_key is not None else np.array(["sample"] * adata.n_obs)
     params = dict(
         ref_label=list(map(str, ref_label)), label_key=label_key, sample_key=sample_key, bin_um=float(bin_um),

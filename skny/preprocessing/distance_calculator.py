@@ -43,10 +43,48 @@ def cv2pil(image):
     return new_image
 
 def calculate_distance(grid, pos_marker_ls, neg_marker_ls=None):
-    '''
+    """Contour the tumor from marker expression and compute the distance of every grid bin from it.
+
+    This is the core step of the SKNY grid workflow (Sakai et al., PLOS Comput Biol 2025).
+    Bins expressing any gene in ``pos_marker_ls`` (and none in ``neg_marker_ls``) are
+    taken as tumor, the binary image is median-filtered and contoured with OpenCV, and the
+    shortest-path distance from the contour to every bin is computed on a pixel graph
+    (multi-source Dijkstra, 8-connected). Distances are then binned into 30 um bands:
+    negative bands lie inside the tumor, positive bands outside (peri-tumoral stroma).
+
+    Parameters
+    ----------
     grid : AnnData
-    pos_marker_ls, neg_marker_ls: list
-    '''
+        Gridded object from ``stlearn.tl.cci.grid`` (10 um bins recommended) with
+        ``uns["grid_xedges"]`` and ``uns["grid_yedges"]``.
+    pos_marker_ls : list of str
+        Marker genes that define the tumor (e.g. ``["CDH1"]`` or ``["EPCAM", "KRT8"]``).
+        A bin is tumor if the summed expression of these genes is >= 1.
+    neg_marker_ls : list of str or None
+        Genes whose expression excludes a bin from the tumor (e.g. stromal markers).
+
+    Returns
+    -------
+    AnnData
+        The same ``grid`` with the processing images added to ``grid.uns``
+        (``"marker"``, ``"marker_median"``, ``"marker_delineation"``, ``"shotest"``,
+        ``"shotest_30_delineation"``, ``"shotest_region_<band>_delineation"``) and the
+        per-bin distance table stored as the attribute ``grid.shortest`` (a DataFrame with
+        a ``"region"`` column holding the distance band of each bin).
+
+    See Also
+    --------
+    skny.pl.preprocessed_images, skny.pl.equidistant_curves, skny.pl.distance_gene_plot,
+    skny.pl.clustering_heatmap, skny.pl.deg_manhattan_plot,
+    skny.pp.convert_indivisual_solid, skny.pp.convert_indivisual_peri,
+    skny.pp.calculate_region : cell-label based alternative that does not need a grid.
+
+    Examples
+    --------
+    >>> grid = st.tl.cci.grid(adata, n_row=n_row, n_col=n_col)
+    >>> grid = sk.pp.calculate_distance(grid, pos_marker_ls=["CDH1"])
+    >>> sk.pl.distance_gene_plot(grid, "KRT15")
+    """
 
     ## get col and row length data from grid object --------------------------
     N_ROW = len(grid.uns["grid_yedges"]) - 1

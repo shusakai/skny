@@ -28,12 +28,26 @@ def deg_manhattan_plot(
     grid, 
     x_range=None, y_range=None, show=True, #min_grids=100
 ):
-    '''
-    grid: AnnData
-    x_range, y_range: list
-    std: bool
-    min_grids: int
-    '''
+    """Manhattan-style plot of differentially expressed genes between distance bands.
+
+    For every gene the intra-tumoral and peri-tumoral bands are compared (effect size =
+    Cohen's d, p-values corrected to q-values with Benjamini-Hochberg) and the result is
+    drawn with genes on the x axis and significance on the y axis. The DEG table is cached in
+    the ``grid`` object (attribute ``deg_by_region``).
+
+    Parameters
+    ----------
+    grid : AnnData
+        Output of :func:`skny.pp.calculate_distance`.
+    x_range, y_range : list of two int or None
+        Region of interest in grid coordinates (``[min, max]``); ``None`` = whole section.
+    show : bool
+        Display the figure; if False the plotly figure object is returned.
+
+    Returns
+    -------
+    plotly.graph_objects.Figure or None
+    """
 
     ## get col and row length data from grid object --------------------------
     N_ROW = len(grid.uns["grid_yedges"]) - 1

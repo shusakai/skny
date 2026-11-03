@@ -1,0 +1,71 @@
+cff-version: 1.2.0
+message: >-
+  If you use SKNY in your research, please cite the paper below
+  (preferred) and, optionally, this software repository.
+type: software
+title: "SKNY (SpatialKNifeY): spatial omics analysis of the tumor microenvironment"
+abstract: >-
+  SKNY (SpatialKNifeY) is a Python package for single-cell spatial omics data
+  (10x Xenium, NanoString CosMx, Akoya PhenoCycler and other AnnData-compatible
+  platforms). It delineates tumor spatial domains, measures the distance of every
+  location or cell from the tumor border and quantifies gene expression and
+  cell density in the tumor core, the peri-tumoral margin and distant tissue.
+authors:
+  - family-names: Sakai
+    given-names: Shunsuke A.
+    email: shusakai@east.ncc.go.jp
+    affiliation: National Cancer Center Japan
+version: 0.3.0
+date-released: "2026-11-02"
+license: MIT
+repository-code: "https://github.com/shusakai/skny"
+url: "https://skny.readthedocs.io"
+keywords:
+  - spatial transcriptomics
+  - spatial omics
+  - tumor microenvironment
+  - Xenium
+  - CosMx
+  - PhenoCycler
+  - AnnData
+  - scanpy
+  - tumor margin
+  - spatial domain
+preferred-citation:
+  type: article
+  title: "SpatialKNifeY (SKNY): Extending from spatial domain to surrounding area to identify microenvironment features with single-cell spatial omics data"
+  authors:
+    - family-names: Sakai
+      given-names: Shunsuke A.
+    - family-names: Nomura
+      given-names: Ryosuke
+    - family-names: Nagasawa
+      given-names: Satoi
+    - family-names: Chi
+      given-names: SungGi
+    - family-names: Suzuki
+      given-names: Ayako
+    - family-names: Suzuki
+      given-names: Yutaka
+    - family-names: Imai
+      given-names: Mitsuho
+    - family-names: Nakamura
+      given-names: Yoshiaki
+    - family-names: Yoshino
+      given-names: Takayuki
+    - family-names: Ishikawa
+      given-names: Shumpei
+    - family-names: Tsuchihara
+      given-names: Katsuya
+    - family-names: Kageyama
+      given-names: Shun-Ichiro
+    - family-names: Yamashita
+      given-names: Riu
+  journal: "PLOS Computational Biology"
+  year: 2025
+  month: 2
+  volume: 21
+  issue: 2
+  start: e1012854
+  doi: 10.1371/journal.pcbi.1012854
+  url: "https://doi.org/10.1371/journal.pcbi.1012854"

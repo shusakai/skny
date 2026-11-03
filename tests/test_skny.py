@@ -1,33 +1,40 @@
 #!/usr/bin/env python
 
-"""Tests for `skny` package."""
-
+"""Smoke tests for the `skny` package: import and public API."""
 
 import unittest
-from click.testing import CliRunner
-
-from skny import skny
-from skny import cli
 
 
-class TestSkny(unittest.TestCase):
-    """Tests for `skny` package."""
+class TestSknyPackage(unittest.TestCase):
+    def test_import_and_version(self):
+        import skny
 
-    def setUp(self):
-        """Set up test fixtures, if any."""
+        self.assertIsInstance(skny.__version__, str)
 
-    def tearDown(self):
-        """Tear down test fixtures, if any."""
+    def test_public_api(self):
+        import skny as sk
 
-    def test_000_something(self):
-        """Test something."""
+        for name in [
+            "calculate_distance",
+            "convert_indivisual_solid",
+            "convert_indivisual_peri",
+            "calculate_region",
+            "regions_from_coords",
+            "region_density",
+        ]:
+            self.assertTrue(callable(getattr(sk.pp, name)), name)
 
-    def test_command_line_interface(self):
-        """Test the CLI."""
-        runner = CliRunner()
-        result = runner.invoke(cli.main)
-        assert result.exit_code == 0
-        assert 'skny.cli.main' in result.output
-        help_result = runner.invoke(cli.main, ['--help'])
-        assert help_result.exit_code == 0
-        assert '--help  Show this message and exit.' in help_result.output
+        for name in [
+            "preprocessed_images",
+            "equidistant_curves",
+            "clustering_heatmap",
+            "distance_gene_plot",
+            "deg_manhattan_plot",
+            "region_map",
+            "region_density_plot",
+        ]:
+            self.assertTrue(callable(getattr(sk.pl, name)), name)
+
+
+if __name__ == "__main__":
+    unittest.main()

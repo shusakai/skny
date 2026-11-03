@@ -10,12 +10,28 @@ import numpy as np
 def clustering_heatmap(
     grid, x_range=None, y_range=None, std=True, # min_grids=100
 ):
-    '''
+    """Heatmap of all genes clustered by their expression profile along the distance from the tumor.
+
+    Mean expression per 30 um distance band is computed for every gene (optionally
+    standardised), genes are hierarchically clustered and drawn as a heatmap with the
+    distance bands (inside the tumor -> outside) on the x axis. The band table is cached in
+    the ``grid`` object (attribute ``gene_expresion_by_region``) and reused by
+    :func:`skny.pl.distance_gene_plot`.
+
+    Parameters
+    ----------
     grid : AnnData
-    x_range, y_range: list
-    std: bool
-    min_grids: int
-    '''
+        Output of :func:`skny.pp.calculate_distance`.
+    x_range, y_range : list of two int or None
+        Region of interest in grid coordinates (``[min, max]``); ``None`` = whole section.
+    std : bool
+        Standardise each gene (z-score across bands) before clustering.
+
+    Returns
+    -------
+    None
+        The figure is displayed.
+    """
 
     ## get col and row length data from grid object --------------------------
     N_ROW = len(grid.uns["grid_yedges"]) - 1

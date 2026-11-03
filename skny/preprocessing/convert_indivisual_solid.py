@@ -6,10 +6,36 @@ import cv2
 
 
 def convert_indivisual_solid(grid, section=None):
-    '''
-    grid: AnnData after `distance_calculator`
-    section: int (0, -30, -60, -90, or -120)
-    '''
+    """Pseudo-bulk gene expression of each individual tumor nest ("single-TME" analysis).
+
+    Connected components of the tumor contour image are treated as individual tumor nests
+    (solids). For every nest the mean expression of all genes over its bins is returned as
+    one observation, so the result can be analysed like a bulk / pseudo-bulk dataset
+    (clustering of nests, trajectory, correlation with the peri-tumoral band from
+    :func:`skny.pp.convert_indivisual_peri`).
+
+    Parameters
+    ----------
+    grid : AnnData
+        Output of :func:`skny.pp.calculate_distance`.
+    section : int or None
+        Distance band (um, inside the tumor) to aggregate: one of ``0, -30, -60, -90, -120``
+        (e.g. ``-30`` = the band 30 to 0 um inside the contour). ``None`` aggregates the whole
+        interior of each nest, i.e. the interval (-inf, 0].
+
+    Returns
+    -------
+    AnnData
+        One observation per tumor nest (``obs_names`` ``"solid_<id>"``), ``var`` = genes,
+        ``obs["imagecol"]`` / ``obs["imagerow"]`` = nest centroid, ``obs["solid"]`` = nest id,
+        ``uns["indivisual_tumor_solid"]`` = image with the nests boxed and numbered.
+        Nests smaller than 10 bins are ignored.
+
+    Examples
+    --------
+    >>> solid = sk.pp.convert_indivisual_solid(grid)             # whole interior
+    >>> solid_30 = sk.pp.convert_indivisual_solid(grid, section=-30)
+    """
     
     ## get col and row length data from grid object --------------------------
     N_ROW = len(grid.uns["grid_yedges"]) - 1

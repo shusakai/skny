@@ -2,6 +2,17 @@
 History
 =======
 
+Unreleased
+----------
+
+* Citation information (PLOS Computational Biology 2025) added to the README and a
+  ``CITATION.cff`` file; ``llms.txt`` and ``AGENTS.md`` added for coding assistants.
+* PyPI metadata (keywords, project URLs, classifiers) and NumPy-style docstrings for all
+  public functions.
+* Removed the unused ``skny`` console script (template leftover).
+* ``skny.pp.calculate_region`` now warns instead of raising when no cell carries the
+  reference label (all cells become ``not_computed``), as covered by the unit tests.
+
 0.3.0 (2026-11-02)
 ------------------
 

@@ -5,10 +5,34 @@ import scanpy as sc
 import cv2
 
 def convert_indivisual_peri(grid, section=30):
-    '''
-    grid: AnnData after `distance_calculator`
-    section: int (30, 60, 90, 120, or 150)
-    '''
+    """Pseudo-bulk gene expression of the peri-tumoral band around each individual tumor nest.
+
+    Counterpart of :func:`skny.pp.convert_indivisual_solid` for the stroma surrounding each
+    nest. A rectangle enlarged by ``section`` um is drawn around every nest; bins that belong
+    to exactly one rectangle (XOR of all rectangles, so that bins between two nests are not
+    double counted) and lie in the chosen distance band are averaged per nest.
+
+    Parameters
+    ----------
+    grid : AnnData
+        Output of :func:`skny.pp.calculate_distance`.
+    section : int
+        Outer limit (um) of the peri-tumoral band: one of ``30, 60, 90, 120, 150``.
+        ``30`` aggregates the band (0, +30] um outside the contour.
+
+    Returns
+    -------
+    AnnData
+        One observation per tumor nest (``obs_names`` ``"solid_<id>"``, matching
+        :func:`skny.pp.convert_indivisual_solid`), ``var`` = genes,
+        ``obs["imagecol"]`` / ``obs["imagerow"]`` = nest centroid,
+        ``uns["indivisual_tumor_solid"]`` = image with the enlarged rectangles,
+        ``uns["xor_result"]`` = mask of bins assigned to a single nest.
+
+    Examples
+    --------
+    >>> peri = sk.pp.convert_indivisual_peri(grid, section=30)
+    """
     ## get col and row length data from grid object --------------------------
     N_ROW = len(grid.uns["grid_yedges"]) - 1
     N_COL = len(grid.uns["grid_xedges"]) - 1

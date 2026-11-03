@@ -139,6 +139,9 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+# Serve llms.txt (summary for LLM-based coding assistants) at the site root.
+html_extra_path = ['_extra']
+
 # for display of plotly graph
 # See https://github.com/spatialaudio/nbsphinx/issues/128
 html_js_files = [
@@ -203,7 +206,7 @@ texinfo_documents = [
      'skny Documentation',
      author,
      'skny',
-     'One line description of project.',
+     'Tumor microenvironment analysis for single-cell spatial omics.',
      'Miscellaneous'),
 ]
 

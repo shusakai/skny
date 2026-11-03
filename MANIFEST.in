@@ -3,6 +3,9 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
 include README.rst
+include CITATION.cff
+include llms.txt
+include AGENTS.md
 include requirements.txt
 
 recursive-include tests *

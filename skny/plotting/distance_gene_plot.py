@@ -11,13 +11,33 @@ def distance_gene_plot(
     grid, gene_symbol, 
     x_range=None, y_range=None, std=False, show=True, #min_grids=100
 ):
-    '''
-    grid: AnnData
-    gene: str
-    x_range, y_range: list
-    std: bool
-    min_grids: int
-    '''
+    """Plot the expression of one gene as a function of distance from the tumor border.
+
+    The x axis is the 30 um distance band (negative = inside the tumor, positive = peri-tumoral
+    stroma), the y axis the mean expression of the gene over the bins of that band.
+
+    Parameters
+    ----------
+    grid : AnnData
+        Output of :func:`skny.pp.calculate_distance`.
+    gene_symbol : str
+        Gene to plot (must be in ``grid.var_names``).
+    x_range, y_range : list of two int or None
+        Region of interest in grid coordinates (``[min, max]``); ``None`` = whole section.
+    std : bool
+        Standardise the expression across bands.
+    show : bool
+        Display the figure; if False the plotly figure object is returned.
+
+    Returns
+    -------
+    plotly.graph_objects.Figure or None
+
+    Examples
+    --------
+    >>> sk.pl.distance_gene_plot(grid, "KRT15")
+    >>> sk.pl.distance_gene_plot(grid, "KRT15", x_range=[240, 320], y_range=[250, 330])  # ROI
+    """
     ## get col and row length data from grid object --------------------------
     N_ROW = len(grid.uns["grid_yedges"]) - 1
     N_COL = len(grid.uns["grid_xedges"]) - 1

@@ -24,32 +24,47 @@ setup(
     author_email='shusakai@east.ncc.go.jp',
     python_requires='>=3.8',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Science/Research',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
+        'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Topic :: Scientific/Engineering :: Bio-Informatics',
+        'Topic :: Scientific/Engineering :: Image Processing',
     ],
-    description="Spatial gene expression anlysis stratified by distance from tumor for multiple platform such as Xenium In Situ, CosMx, and PhenoCycler.",
-    entry_points={
-        'console_scripts': [
-            'skny=skny.cli:main',
-        ],
-    },
+    description=(
+        "SKNY (SpatialKNifeY): tumor microenvironment analysis for single-cell spatial omics "
+        "(Xenium, CosMx, PhenoCycler). Tumor border detection, distance from the tumor, "
+        "core / margin / distant regions, gene expression and cell density per region."
+    ),
+    long_description_content_type='text/x-rst',
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,
     include_package_data=True,
-    keywords='skny',
+    keywords=(
+        "spatial transcriptomics, spatial omics, spatial proteomics, tumor microenvironment, "
+        "tumor border, tumor margin, spatial domain, Xenium, CosMx, PhenoCycler, "
+        "single-cell, AnnData, scanpy, squidpy, stlearn, cancer, bioinformatics"
+    ),
     name='skny',
     packages=find_packages(include=['skny', 'skny.*']),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/shusakai/skny',
+    project_urls={
+        'Documentation': 'https://skny.readthedocs.io',
+        'Source': 'https://github.com/shusakai/skny',
+        'Issue Tracker': 'https://github.com/shusakai/skny/issues',
+        'Paper': 'https://doi.org/10.1371/journal.pcbi.1012854',
+        'Changelog': 'https://github.com/shusakai/skny/blob/main/HISTORY.rst',
+    },
     version='0.3.0',
     zip_safe=False,
 )
