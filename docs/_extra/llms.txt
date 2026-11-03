@@ -37,6 +37,10 @@ grid = sk.pp.calculate_distance(grid, pos_marker_ls=["CDH1"], neg_marker_ls=None
 #   grid = sk.pp.grid(adata, bin_um=10, use_label="cell_type")
 #   grid = sk.pp.calculate_distance(grid, use_label="cell_type", pos_label_ls=["Malignant"], neg_label_ls=None, min_cells=1, min_fraction=0.0)
 # grid.uns["tumor_definition"] records which definition was used.
+# Smoothing of the binary tumor image is configurable: filters=[("median", 3), ("box", 3)] (default), threshold=90.
+#   steps: ("median", k) | ("box", k) | ("gaussian", k[, sigma]) | ("open"|"close"|"erode"|"dilate", k[, iterations]) | "fill_holes" | ("min_area", n_bins) | "threshold"
+#   e.g. filters=[("gaussian", 5), ("close", 3), "fill_holes"], threshold=128 ; at least one smoothing step is required.
+#   sk.pp.apply_filters(grid.uns["marker"], filters, threshold) -> bool mask, to preview a setting. Recorded in grid.uns["image_processing"].
 # shortest-path distance (networkx Dijkstra) from the contour to every bin.
 # Stores images in grid.uns[...] and a DataFrame grid.shortest with a "region" column
 # (distance bands of 30 um; negative = inside the tumor, positive = outside).

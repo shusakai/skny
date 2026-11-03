@@ -21,6 +21,7 @@ Expression-based tumor contour (grid data)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autofunction:: skny.pp.calculate_distance
+.. autofunction:: skny.pp.apply_filters
 .. autofunction:: skny.pp.convert_indivisual_solid
 .. autofunction:: skny.pp.convert_indivisual_peri
 

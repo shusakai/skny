@@ -49,6 +49,9 @@ Public API = everything imported in `skny/pp.py` and `skny/pl.py`. Function name
 - `calculate_distance` defines tumor bins from marker genes (`pos_marker_ls`) or from cell labels
   (`use_label` + `pos_label_ls`; requires `sk.pp.grid(..., use_label=...)` so that `uns[use_label]`
   holds the per-bin label fractions). Exactly one of the two must be given.
+- The smoothing of the tumor image lives in `apply_filters` (distance_calculator.py): a list of
+  steps on an 8-bit mask, binarised at `threshold`. Add new steps there (and to `_FILTER_OPS`),
+  keep the default `(("median", 3), ("box", 3))`, threshold 90 (the paper setting).
 - Grid bins are named `grid_<n>` with `n = col * n_row + row`, numbered from 0 (stlearn
   convention). Always use `bin_names(grid)` to build the full bin index; never hard-code
   `grid_1 ...` (that was the one-bin offset bug fixed in 0.3.2).

@@ -2,6 +2,21 @@
 History
 =======
 
+0.3.4 (2026-11-03)
+------------------
+
+* Configurable image processing in ``skny.pp.calculate_distance``: ``filters`` (a list of steps:
+  median / box / gaussian filters, morphological open / close / erode / dilate, hole filling,
+  minimum component area, explicit threshold) and ``threshold``. The default
+  ``[("median", 3), ("box", 3)]`` with threshold 90 is the setting of the paper. The settings are
+  recorded in ``uns["image_processing"]``; ``skny.pp.apply_filters`` previews a filter set.
+* The smoothed mask now defines both the contour and the tumor pixels (previously the box
+  filter + threshold was used for the contour only, the median-filtered image for the pixels).
+  On the 10x Xenium breast cancer section this changes the intra-tumoral bins from 66.8k to
+  69.5k (+4 %) and the number of tumor nests from 431 to 535 with the default setting.
+* At least one smoothing step is now required (without smoothing the contour fragments into
+  thousands of pieces and the distance calculation takes tens of minutes).
+
 0.3.3 (2026-11-03)
 ------------------
 

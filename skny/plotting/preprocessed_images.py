@@ -41,7 +41,7 @@ def preprocessed_images(
     
     image_ls += [f"shotest_region_{i}_delineation" for i in df_shotest.dropna().region.value_counts()[df_shotest.dropna().region.value_counts() > 100].sort_index().index]
 
-    image_name_tp = ("Tumor", "Median filter", "Delineation", "Equidistant curves"
+    image_name_tp = ("Tumor", "Filtered", "Delineation", "Equidistant curves"
     ) + tuple([str(i * 10) for i in df_shotest.dropna().region.value_counts()[df_shotest.dropna().region.value_counts() > 100].sort_index().index])
 
     # Plot --------------------------------------

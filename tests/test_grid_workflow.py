@@ -107,6 +107,53 @@ class TestGridAndReader(unittest.TestCase):
         with self.assertRaises(KeyError):
             sk.pp.calculate_distance(g_lab, use_label="cell_type", pos_label_ls=["Malignant"])
 
+    def test_filters(self):
+        import skny as sk
+
+        cells = make_cells(n=20000)
+        g = sk.pp.grid(cells, bin_um=10, verbose=False)
+        raw = (g.to_df()["CDH1"] >= 1)
+        # apply_filters on a boolean / colour image; default = paper setting
+        d_def = sk.pp.calculate_distance(sk.pp.grid(cells, bin_um=10, verbose=False), pos_marker_ls=["CDH1"])
+        self.assertEqual(d_def.uns["image_processing"], {"filters": ["median 3", "box 3"], "threshold": 90})
+        # the processed grid can be written to / read from h5ad (uns must be serialisable)
+        import tempfile, os, anndata as ad
+        with tempfile.TemporaryDirectory() as tmp:
+            d_def.write_h5ad(os.path.join(tmp, "g.h5ad")); back = ad.read_h5ad(os.path.join(tmp, "g.h5ad"))
+        self.assertEqual(list(back.uns["image_processing"]["filters"]), ["median 3", "box 3"])
+        self.assertEqual(back.uns["tumor_definition"]["mode"], "marker")
+        m_def = sk.pp.apply_filters(d_def.uns["marker"])
+        np.testing.assert_array_equal(m_def, d_def.uns["marker_median"][..., 0] > 0)
+        # no smoothing keeps the raw mask
+        m_none = sk.pp.apply_filters(d_def.uns["marker"], filters=None)
+        np.testing.assert_array_equal(m_none, d_def.uns["marker"][..., 0] > 0)
+        # alternative pipelines run end to end and give a sensible domain
+        for filters, thr in [([("gaussian", 5), ("close", 3), "fill_holes"], 128),
+                             ([("median", 5), ("min_area", 10)], 90),
+                             (["median", "box", "threshold", ("open", 3)], 90),
+                             ([{"op": "gaussian", "ksize": 3, "sigma": 1.0}], 90)]:
+            d = sk.pp.calculate_distance(sk.pp.grid(cells, bin_um=10, verbose=False), pos_marker_ls=["CDH1"],
+                                         filters=filters, threshold=thr)
+            m = d.uns["marker_median"][..., 0] > 0
+            self.assertGreater(m.sum(), 0.5 * m_def.sum()); self.assertLess(m.sum(), 1.5 * m_def.sum())
+            self.assertTrue((d.shortest.dropna()["region"].apply(lambda i: i.right) < 0).any())
+        # min_area removes an isolated small nest
+        mask = np.zeros((40, 60), bool); mask[10:30, 10:40] = True; mask[2:4, 50:52] = True
+        self.assertTrue(sk.pp.apply_filters(mask, filters=None)[2, 50])
+        self.assertFalse(sk.pp.apply_filters(mask, filters=[("min_area", 10)])[2, 50])
+        self.assertTrue(sk.pp.apply_filters(mask, filters=[("min_area", 10)])[20, 20])
+        # fill_holes fills an enclosed hole
+        mask2 = mask.copy(); mask2[18:22, 20:24] = False
+        self.assertFalse(sk.pp.apply_filters(mask2, filters=None)[20, 22])
+        self.assertTrue(sk.pp.apply_filters(mask2, filters=["fill_holes"])[20, 22])
+        # errors
+        with self.assertRaises(ValueError):
+            sk.pp.calculate_distance(sk.pp.grid(cells, bin_um=10, verbose=False), pos_marker_ls=["CDH1"], filters=None)
+        with self.assertRaises(ValueError):
+            sk.pp.apply_filters(mask, filters=[("sharpen", 3)])
+        with self.assertRaises(ValueError):
+            sk.pp.apply_filters(mask, filters=[("median", 4)])
+
     def test_bin_names_zero_and_one_based(self):
         import skny as sk
 

@@ -110,6 +110,11 @@ Quick start
    grid = sk.pp.calculate_distance(grid, use_label="cell_type", pos_label_ls=["Malignant"],
                                    neg_label_ls=["Fibroblast"], min_fraction=0.5)
 
+   # ... and choose the smoothing of the tumor image (default: 3x3 median + 3x3 box, threshold 90)
+   grid = sk.pp.calculate_distance(grid, pos_marker_ls=["CDH1"],
+                                   filters=[("gaussian", 5), ("close", 3), "fill_holes"], threshold=128)
+   mask = sk.pp.apply_filters(grid.uns["marker"], filters=[("median", 5), ("min_area", 10)])  # preview a filter set
+
    sk.pl.preprocessed_images(grid, figsize=(800, None))   # tumor mask, contour, equidistant curves
    sk.pl.gene_plot(grid, "KRT15")                          # expression on the tissue
    sk.pl.distance_gene_plot(grid, "KRT15")                 # expression vs distance from the tumor

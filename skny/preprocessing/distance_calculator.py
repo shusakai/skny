@@ -43,6 +43,105 @@ def cv2pil(image):
     new_image = Image.fromarray(new_image)
     return new_image
 
+DEFAULT_FILTERS = (("median", 3), ("box", 3))
+_FILTER_OPS = ("median", "box", "mean", "blur", "gaussian", "open", "close", "erode", "dilate",
+               "fill_holes", "min_area", "threshold")
+
+
+def _parse_step(step):
+    """Normalise a filter step to (op, args)."""
+    if isinstance(step, str):
+        return step.lower(), ()
+    if isinstance(step, dict):
+        step = dict(step); op = str(step.pop("op")).lower()
+        return op, tuple(step.values())
+    step = tuple(step)
+    return str(step[0]).lower(), tuple(step[1:])
+
+
+def apply_filters(mask, filters=DEFAULT_FILTERS, threshold=90):
+    """Smooth a binary tumor mask with a sequence of image-processing steps and re-binarise it.
+
+    The mask is handled as an 8-bit image (0 = background, 255 = tumor); linear filters blur it,
+    morphological steps reshape it, and the final (or an explicit ``"threshold"``) step binarises
+    it at ``threshold``. Used by :func:`skny.pp.calculate_distance`; call it directly to preview
+    the effect of a filter set on ``grid.uns["marker"]``.
+
+    Parameters
+    ----------
+    mask : ndarray (n_row, n_col)
+        Boolean mask, or an 8-bit / colour image from ``grid.uns["marker"]`` (non-zero = tumor).
+    filters : sequence of steps, or None
+        Each step is ``"op"`` or ``("op", *args)``:
+
+        * ``("median", k)``: median filter, ``k`` odd (default 3)
+        * ``("box", k)`` / ``"mean"`` / ``"blur"``: box (mean) filter
+        * ``("gaussian", k[, sigma])``: Gaussian filter (``sigma`` 0 = derived from ``k``)
+        * ``("open", k[, iterations])``, ``("close", k[, iterations])``, ``("erode", k)``,
+          ``("dilate", k)``: morphological operations with an elliptical kernel
+        * ``"fill_holes"``: fill enclosed holes (binarises first)
+        * ``("min_area", n)``: drop connected components smaller than ``n`` bins (binarises first)
+        * ``"threshold"``: binarise at ``threshold`` at this point
+
+        Default ``(("median", 3), ("box", 3))`` (the setting of the paper). ``None`` or ``()``
+        returns the mask unchanged (useful to look at the raw mask; not accepted by
+        :func:`skny.pp.calculate_distance`, where at least one smoothing step is required).
+    threshold : int
+        Value (0-255) above which a filtered pixel counts as tumor. With the default 3 x 3 box
+        filter, 90 means at least 4 of the 9 pixels of the neighbourhood.
+
+    Returns
+    -------
+    ndarray of bool (n_row, n_col)
+        The filtered tumor mask.
+
+    Examples
+    --------
+    >>> m = sk.pp.apply_filters(grid.uns["marker"], filters=[("gaussian", 5), ("close", 3), "fill_holes"], threshold=128)
+    """
+    m = np.asarray(mask)
+    if m.ndim == 3:
+        m = m.any(axis=2)
+    img = np.where(m.astype(bool), 255, 0).astype(np.uint8)
+    thr = int(threshold)
+
+    def _binarise(a):
+        return np.where(a > thr, 255, 0).astype(np.uint8)
+
+    for step in (filters or ()):
+        op, args = _parse_step(step)
+        if op not in _FILTER_OPS:
+            raise ValueError(f"unknown filter step {step!r}; allowed ops: {_FILTER_OPS}")
+        k = int(args[0]) if args else 3
+        if op == "threshold":
+            img = _binarise(img)
+        elif op == "median":
+            if k % 2 == 0 or k < 3:
+                raise ValueError("median kernel size must be odd and >= 3")
+            img = cv2.medianBlur(img, k)
+        elif op in ("box", "mean", "blur"):
+            img = cv2.blur(img, (k, k))
+        elif op == "gaussian":
+            if k % 2 == 0 or k < 1:
+                raise ValueError("gaussian kernel size must be odd and >= 1")
+            sigma = float(args[1]) if len(args) > 1 else 0.0
+            img = cv2.GaussianBlur(img, (k, k), sigma)
+        elif op in ("open", "close", "erode", "dilate"):
+            kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (k, k))
+            it = int(args[1]) if len(args) > 1 else 1
+            cv_op = {"open": cv2.MORPH_OPEN, "close": cv2.MORPH_CLOSE, "erode": cv2.MORPH_ERODE, "dilate": cv2.MORPH_DILATE}[op]
+            img = cv2.morphologyEx(img, cv_op, kernel, iterations=it)
+        elif op == "fill_holes":
+            from scipy import ndimage as ndi
+            img = np.where(ndi.binary_fill_holes(img > thr), 255, 0).astype(np.uint8)
+        elif op == "min_area":
+            n_lab, lab, stats, _ = cv2.connectedComponentsWithStats(_binarise(img), connectivity=8)
+            keep = np.zeros(n_lab, dtype=bool)
+            keep[1:] = stats[1:, cv2.CC_STAT_AREA] >= k
+            img = np.where(keep[lab], 255, 0).astype(np.uint8)
+    return img > thr
+
+
 def _tumor_bins(grid, pos_marker_ls=None, neg_marker_ls=None, use_label=None, pos_label_ls=None,
                 neg_label_ls=None, min_cells=1, min_fraction=0.0):
     """Return a Series (index = grid.obs_names) with 1 for tumor bins and -1 otherwise."""
@@ -98,6 +197,7 @@ def _tumor_bins(grid, pos_marker_ls=None, neg_marker_ls=None, use_label=None, po
 def calculate_distance(
     grid, pos_marker_ls=None, neg_marker_ls=None,
     use_label=None, pos_label_ls=None, neg_label_ls=None, min_cells=1, min_fraction=0.0,
+    filters=DEFAULT_FILTERS, threshold=90,
 ):
     """Detect the tumor spatial domain on a grid and compute the distance of every bin from its contour.
 
@@ -105,8 +205,9 @@ def calculate_distance(
     The tumor bins are defined either from **marker gene expression** (``pos_marker_ls`` /
     ``neg_marker_ls``) or from **annotated cell labels** (``use_label`` + ``pos_label_ls`` /
     ``neg_label_ls``; the grid must have been built with ``skny.pp.grid(adata, use_label=...)``).
-    The binary image is median-filtered and contoured with OpenCV, and the shortest-path distance
-    from the contour to every bin is computed on a pixel graph (multi-source Dijkstra,
+    The binary image is smoothed (``filters``: by default a 3 x 3 median filter followed by a
+    3 x 3 box filter, binarised at ``threshold``), contoured with OpenCV, and the shortest-path
+    distance from the contour to every bin is computed on a pixel graph (multi-source Dijkstra,
     8-connected). Distances are then binned into 30 um bands: negative bands lie inside the
     tumor, positive bands outside (peri-tumoral stroma).
 
@@ -134,6 +235,14 @@ def calculate_distance(
     min_fraction : float
         Minimum fraction (0-1) of positive-label cells per bin (label mode only). Default 0,
         i.e. any bin touched by a tumor cell; use e.g. 0.5 for a stricter domain.
+    filters : sequence of steps or None
+        Image-processing steps applied to the binary tumor image before contouring, e.g.
+        ``[("median", 3), ("box", 3)]`` (default), ``[("gaussian", 5), ("close", 3), "fill_holes"]``
+        or ``[("median", 5), ("min_area", 10)]``. See :func:`skny.pp.apply_filters` for all
+        steps. At least one smoothing step is required: without smoothing the contour breaks
+        into thousands of fragments and the distance calculation becomes extremely slow.
+    threshold : int
+        Binarisation threshold (0-255) applied after the filters. Default 90.
 
     Returns
     -------
@@ -141,7 +250,8 @@ def calculate_distance(
         The same ``grid`` with the processing images added to ``grid.uns``
         (``"marker"``, ``"marker_median"``, ``"marker_delineation"``,
         ``"shotest_30_delineation"``, ``"shotest_region_<band>_delineation"``), the tumor
-        definition in ``grid.uns["tumor_definition"]``, and the per-bin distance table stored
+        definition in ``grid.uns["tumor_definition"]``, the filter settings in
+        ``grid.uns["image_processing"]``, and the per-bin distance table stored
         as the attribute ``grid.shortest`` (a DataFrame with a ``"region"`` column holding the
         distance band of each bin).
 
@@ -166,6 +276,11 @@ def calculate_distance(
     >>> grid = sk.pp.calculate_distance(grid, use_label="cell_type", pos_label_ls=["Malignant"],
     ...                                 neg_label_ls=["Fibroblast"], min_fraction=0.5)
     >>> sk.pl.distance_gene_plot(grid, "KRT15")
+
+    Different smoothing (Gaussian filter, closing, hole filling, stricter threshold):
+
+    >>> grid = sk.pp.calculate_distance(grid, pos_marker_ls=["CDH1"],
+    ...                                 filters=[("gaussian", 5), ("close", 3), "fill_holes"], threshold=128)
     """
     ## get col and row length data from grid object --------------------------
     N_ROW = len(grid.uns["grid_yedges"]) - 1
@@ -194,28 +309,28 @@ def calculate_distance(
     grid.uns["marker"] = img.copy() # add to grid object
 
     
-    ## Median filter---------------------------
-    #img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
-    img_med = cv2.medianBlur(img, ksize=3)
-    grid.uns["marker_median"] = img_med.copy() # add to grid object
+    ## Smoothing (configurable filters) and binarisation ---------------------------
+    filters = tuple(filters) if filters else ()
+    if not filters:
+        raise ValueError(
+            "filters must contain at least one smoothing step, e.g. the default "
+            "[('median', 3), ('box', 3)]; see skny.pp.apply_filters for the available steps"
+        )
+    smoothed = apply_filters(tumor_mask, filters=filters, threshold=threshold)
+    # recorded as strings ("median 3") so that the object can be written to h5ad
+    grid.uns["image_processing"] = dict(
+        filters=[" ".join(str(x) for x in (op,) + tuple(args)) for op, args in map(_parse_step, filters)],
+        threshold=int(threshold),
+    )
+    img_med = np.zeros((N_ROW, N_COL, 3), dtype=np.uint8)
+    img_med[smoothed] = (36, 231, 253)
+    grid.uns["marker_median"] = img_med.copy()  # smoothed tumor image (key kept for compatibility)
 
-    
     ## Delineation --------------------------------
-    threshold = 90 # threshold
-    # convert glay scale and blur
-    img_gray = cv2.cvtColor(img_med, cv2.COLOR_BGR2GRAY)
-    img_blur = cv2.blur(img_gray, (3,3))
-    # delineation
-    ret, img_binary = cv2.threshold(img_blur, threshold, 255, cv2.THRESH_BINARY)
+    img_binary = np.where(smoothed, 255, 0).astype(np.uint8)
     contours, hierarchy = cv2.findContours(img_binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    
-    contours_ = []
-    # check each delineation
-    for i, s in zip(contours, hierarchy[0]):
-        # select top of hierarchy polygon
-        #if s[-1] == -1:
-        contours_ += [i]
-    
+    contours_ = list(contours) if hierarchy is not None else []
+
     img_color_with_contours = cv2.drawContours(img_med, contours_, -1, (0,255,0), 1)
     grid.uns["marker_delineation"] = img_color_with_contours # add to grid object
 

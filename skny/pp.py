@@ -1,5 +1,5 @@
 """Preprocessing functions (``skny.pp``)."""
-from .preprocessing.distance_calculator import calculate_distance
+from .preprocessing.distance_calculator import calculate_distance, apply_filters, DEFAULT_FILTERS
 from .preprocessing.convert_indivisual_peri import convert_indivisual_peri
 from .preprocessing.convert_indivisual_solid import convert_indivisual_solid
 from .preprocessing.calculate_region import calculate_region, regions_from_coords
