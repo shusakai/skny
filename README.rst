@@ -167,7 +167,8 @@ Documentation and tutorials
 
   * `Xenium analysis`_ - workflow 1 end to end
   * `Single-TME analysis`_ - per-tumor-nest analysis
-  * `Region analysis`_ - workflow 2 (core / margin / dist, cell density)
+  * `Region analysis`_ - workflow 2 (core / margin / dist, cell density) and label-defined contours
+  * `Image-processing options`_ - choosing the smoothing of the tumor contour (``filters`` / ``threshold``)
   * `Reproduction of the paper figures`_
 
 * API reference: https://skny.readthedocs.io/en/latest/api.html
@@ -222,6 +223,7 @@ MIT. See `LICENSE`_.
 .. _Xenium analysis: https://skny.readthedocs.io/en/latest/notebooks/Xenium_analysis.html
 .. _Single-TME analysis: https://skny.readthedocs.io/en/latest/notebooks/single-TME_analysis.html
 .. _Region analysis: https://skny.readthedocs.io/en/latest/notebooks/region_analysis.html
+.. _Image-processing options: https://skny.readthedocs.io/en/latest/notebooks/image_processing_options.html
 .. _Reproduction of the paper figures: https://skny.readthedocs.io/en/latest/notebooks/SKNY_paper_Sakai_et_al.html
 .. _llms.txt: https://github.com/shusakai/skny/blob/main/llms.txt
 .. _AGENTS.md: https://github.com/shusakai/skny/blob/main/AGENTS.md

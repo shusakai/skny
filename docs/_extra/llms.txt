@@ -94,5 +94,6 @@ returns the region map for custom pipelines.
 
 - https://skny.readthedocs.io/en/latest/notebooks/Xenium_analysis.html
 - https://skny.readthedocs.io/en/latest/notebooks/single-TME_analysis.html
-- https://skny.readthedocs.io/en/latest/notebooks/region_analysis.html
+- https://skny.readthedocs.io/en/latest/notebooks/region_analysis.html (core/margin/dist + label-defined contour)
+- https://skny.readthedocs.io/en/latest/notebooks/image_processing_options.html (filters / threshold / apply_filters)
 - https://skny.readthedocs.io/en/latest/notebooks/SKNY_paper_Sakai_et_al.html

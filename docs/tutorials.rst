@@ -9,3 +9,4 @@ Tutorials
    notebooks/single-TME_analysis
    notebooks/SKNY_paper_Sakai_et_al
    notebooks/region_analysis
+   notebooks/image_processing_options
