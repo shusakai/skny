@@ -49,20 +49,8 @@ extensions = [
     "sphinx.ext.mathjax",  # Maths visualization
 ]
 
-# for plotly
-# MathJax config
-# See https://github.com/spatialaudio/nbsphinx/issues/572#issuecomment-853389268
-mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-mathjax2_config = {
-    "tex2jax": {
-        "inlineMath": [["$", "$"], ["\\(", "\\)"]],
-        "processEscapes": True,
-        "ignoreClass": "document",
-        "processClass": "math|output_area",
-    }
-}
-
-myst_update_mathjax = False
+# MathJax: Sphinx's default (MathJax 3, loaded only on pages with math). The old MathJax 2
+# configuration conflicted with the MathJax 3 loader that plotly figures embed.
 
 # Heavy / optional dependencies are mocked so that autodoc can import skny on Read the Docs.
 autodoc_mock_imports = [
@@ -70,6 +58,7 @@ autodoc_mock_imports = [
 ]
 autodoc_member_order = "bysource"
 nbsphinx_execute = "never"
+nbsphinx_requirejs_path = ""  # nbsphinx would otherwise inject RequireJS (see html_js_files below)
 
 myst_enable_extensions = [
     "substitution",
@@ -142,12 +131,11 @@ html_static_path = ['_static']
 # Serve llms.txt (summary for LLM-based coding assistants) at the site root.
 html_extra_path = ['_extra']
 
-# for display of plotly graph
-# See https://github.com/spatialaudio/nbsphinx/issues/128
-html_js_files = [
-    "require.min.js",
-    "custom.js",
-]
+# Plotly figures in the tutorials are stored as self-contained HTML (plotly.js loaded from the
+# CDN with a classic <script> tag). RequireJS must NOT be loaded on the page: with an AMD loader
+# present plotly.js registers itself as a module instead of defining window.Plotly and the
+# figures stay blank. (require.min.js / custom.js were needed by the old "notebook" renderer.)
+html_js_files = []
 
 # -- Options for HTMLHelp output ---------------------------------------
 
