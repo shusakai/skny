@@ -14,6 +14,10 @@
         :target: https://github.com/shusakai/skny/blob/main/LICENSE
         :alt: License
 
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.23907317.svg
+        :target: https://doi.org/10.5281/zenodo.23907317
+        :alt: Software DOI (Zenodo)
+
 SKNY (SpatialKNifeY) - tumor microenvironment analysis for single-cell spatial omics
 ====================================================================================
 
@@ -190,6 +194,10 @@ If you use SKNY, please cite:
      pages   = {e1012854},
      doi     = {10.1371/journal.pcbi.1012854}
    }
+
+To cite a specific version of the software, use the Zenodo DOI:
+https://doi.org/10.5281/zenodo.23907317 (always resolves to the latest release; each release also has its
+own DOI, e.g. v0.3.1: https://doi.org/10.5281/zenodo.23907318).
 
 A ``CITATION.cff`` file is included in the repository (GitHub "Cite this repository" button).
 

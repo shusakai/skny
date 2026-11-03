@@ -17,6 +17,14 @@ authors:
     affiliation: National Cancer Center Japan
 version: 0.3.1
 date-released: "2026-11-03"
+doi: 10.5281/zenodo.23907318
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23907317
+    description: "Concept DOI (all versions)"
+  - type: doi
+    value: 10.5281/zenodo.23907318
+    description: "Version DOI (v0.3.1)"
 license: MIT
 repository-code: "https://github.com/shusakai/skny"
 url: "https://skny.readthedocs.io"

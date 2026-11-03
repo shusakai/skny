@@ -11,6 +11,7 @@
 - API: https://skny.readthedocs.io/en/latest/api.html
 - Source: https://github.com/shusakai/skny
 - Paper (cite this): Sakai SA et al. "SpatialKNifeY (SKNY): Extending from spatial domain to surrounding area to identify microenvironment features with single-cell spatial omics data." PLOS Computational Biology 21(2): e1012854 (2025). https://doi.org/10.1371/journal.pcbi.1012854
+- Software DOI (Zenodo, all versions): https://doi.org/10.5281/zenodo.23907317
 - License: MIT
 
 ## When to use SKNY

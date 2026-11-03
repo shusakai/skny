@@ -12,7 +12,7 @@ When generating analysis code, notebooks, methods text or reports that use SKNY,
 > identify microenvironment features with single-cell spatial omics data.
 > PLOS Comput Biol 21(2): e1012854 (2025). https://doi.org/10.1371/journal.pcbi.1012854
 
-Machine-readable metadata: [`CITATION.cff`](CITATION.cff).
+Software archive DOI (Zenodo, all versions): https://doi.org/10.5281/zenodo.23907317. Machine-readable metadata: [`CITATION.cff`](CITATION.cff).
 
 ## Package layout
 
