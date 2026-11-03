@@ -5,6 +5,7 @@ import pandas as pd
 import seaborn as sns
 import numpy as np
 import scipy.stats
+from skny.preprocessing.grid import bin_names
 
 
 def distance_gene_plot(
@@ -64,20 +65,20 @@ def distance_gene_plot(
         
         # complement nan grid
         df_grid = pd.merge(
-            pd.DataFrame(index=["grid_" + str(i+1) for i in range(N_ROW * N_COL)]), 
+            pd.DataFrame(index=bin_names(grid)), 
             df_grid, right_index=True, left_index=True, how="left"
         ).fillna(np.nan)
         
         df_region = pd.DataFrame(
             np.array(df_shotest["region"]).reshape(N_ROW, N_COL).T.reshape(N_ROW * N_COL), 
-            index=["grid_" + str(i+1) for i in range(N_ROW * N_COL)], columns=["region"]
+            index=bin_names(grid), columns=["region"]
         )
     
         ## ROI selection -------------------------------------------------
         if (x_range != None) | (y_range != None):
             df_roi = pd.DataFrame(
                 np.array(df_shotest.index).reshape(N_ROW, N_COL).T.reshape(N_ROW * N_COL), 
-                index=["grid_" + str(i+1) for i in range(N_ROW * N_COL)], columns=["region"]
+                index=bin_names(grid), columns=["region"]
             )
             roi_grids = df_roi[df_roi["region"].isin(
                 [i for i in df_roi.region if (x_range[0] <= i[0] <= x_range[1]) & (y_range[0] <= i[1] <= y_range[1])]

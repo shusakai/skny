@@ -22,6 +22,7 @@ skny/
   pp.py                  # re-exports preprocessing functions
   pl.py                  # re-exports plotting functions
   preprocessing/
+    grid.py                      # read_xenium, grid (stlearn-free gridding), bin_names, grid_shape
     distance_calculator.py       # calculate_distance (grid workflow, paper method)
     convert_indivisual_solid.py  # per-tumor-nest pseudo-bulk, inside the nest
     convert_indivisual_peri.py   # per-tumor-nest pseudo-bulk, band around the nest
@@ -42,8 +43,12 @@ Public API = everything imported in `skny/pp.py` and `skny/pl.py`. Function name
   attribute `grid.shortest` (a DataFrame). Workflow 2 writes to `adata.obs[key_added]`,
   `adata.obs[key_added + "_dist_um"]` and `adata.uns[key_added]`.
 - Coordinates for workflow 2 must be in micrometres.
-- `stlearn` and `scanpy` are **not** imported by the package; `stlearn` is an optional extra used
-  only in the tutorials to build the grid. Do not add hard dependencies on them.
+- `stlearn` and `scanpy` are **not** imported by the package. `sk.pp.read_xenium` + `sk.pp.grid`
+  replace `stlearn.ReadXenium` + `stlearn.tl.cci.grid`; grids from stlearn are still accepted.
+  Do not add hard dependencies on stlearn / scanpy.
+- Grid bins are named `grid_<n>` with `n = col * n_row + row`, numbered from 0 (stlearn
+  convention). Always use `bin_names(grid)` to build the full bin index; never hard-code
+  `grid_1 ...` (that was the one-bin offset bug fixed in 0.3.2).
 - Keep pandas / numpy usage version-agnostic (no `applymap`, no row-wise `apply` returning arrays,
   no `fig.canvas.renderer`).
 - Docstrings use the NumPy style (rendered with sphinx.ext.napoleon). Keep them accurate when

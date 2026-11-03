@@ -2,6 +2,19 @@
 History
 =======
 
+0.3.2 (2026-11-03)
+------------------
+
+* New ``skny.pp.read_xenium`` (10x Xenium reader, h5py only) and ``skny.pp.grid`` (10 um
+  gridding with the same output format as ``stlearn.tl.cci.grid``), so the expression-based
+  workflow runs with ``pip install skny`` alone; ``skny.pl.gene_plot`` replaces
+  ``stlearn.pl.gene_plot`` in the tutorials.
+* Fixed a one-bin offset: stlearn numbers grid bins from ``grid_0`` while SKNY assumed
+  ``grid_1``, which shifted every mask by one bin (10 um). The numbering is now detected
+  (``skny.pp.bin_names``); results on stlearn grids move by one bin compared with <= 0.3.1.
+* Tutorials no longer depend on stlearn (the *Tumor contour with Xenium data* notebook was
+  re-executed with skny 0.3.2); the sdist no longer ships the notebooks (11 MB -> < 1 MB).
+
 0.3.1 (2026-11-03)
 ------------------
 

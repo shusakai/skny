@@ -10,6 +10,7 @@ import cv2
 from PIL import Image
 import networkx as nx
 import math
+from .grid import bin_names
 
 
 # function
@@ -107,7 +108,7 @@ def calculate_distance(grid, pos_marker_ls, neg_marker_ls=None):
     # expand information of all grid
     pos_series.name = "tumor_grid"
     df_grid_tumor = pd.merge(
-        pd.DataFrame(index=["grid_" + str(i+1) for i in range(N_ROW * N_COL)]), 
+        pd.DataFrame(index=bin_names(grid)), 
         pos_series, right_index=True, left_index=True, how="left"
     ).fillna(-1)
 

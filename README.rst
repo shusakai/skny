@@ -21,9 +21,10 @@
 SKNY (SpatialKNifeY) - tumor microenvironment analysis for single-cell spatial omics
 ====================================================================================
 
-.. image:: _images/SKYN_logo.svg
+.. image:: https://raw.githubusercontent.com/shusakai/skny/main/_images/SKYN_logo.svg
    :target: https://skny.readthedocs.io
    :width: 30%
+   :alt: SKNY logo
 
 **SKNY** (SpatialKNifeY) is a Python package for **spatial transcriptomics / spatial proteomics
 analysis of the tumor microenvironment (TME)**. It works on single-cell spatial omics data from
@@ -79,14 +80,8 @@ SKNY supports Python 3.8 to 3.13 (tested with numpy 2 and pandas 3) and depends 
 ``opencv-python``, ``networkx`` and ``pillow``, so it installs alongside current ``scanpy`` /
 ``squidpy`` environments.
 
-Workflow 1 (expression-based contour) expects a 10 µm grid built with ``stlearn.tl.cci.grid``;
-install it with the extra if you do not have ``stlearn`` already:
-
-.. code-block:: console
-
-   pip install "skny[stlearn]"
-
-Workflow 2 (cell-label based regions) needs no additional package.
+Both workflows run with ``pip install skny`` alone. Grids made with ``stlearn.tl.cci.grid``
+are accepted as well (``pip install "skny[stlearn]"`` installs stlearn if you want it).
 
 
 Quick start
@@ -97,25 +92,20 @@ Quick start
 .. code-block:: python
 
    import skny as sk
-   import stlearn as st
 
-   # Load a Xenium run with stlearn 0.4.x (any AnnData with obs["imagecol"], obs["imagerow"] works;
-   # with stlearn >= 1.0 use the spatialdata readers and st.tl.cci.grid without n_cpus)
-   adata = st.ReadXenium(
-       feature_cell_matrix_file="Xenium_FFPE_Human_Breast_Cancer_Rep1_cell_feature_matrix.h5",
-       cell_summary_file="Xenium_FFPE_Human_Breast_Cancer_Rep1_cells.csv.gz",
-       library_id="example", image_path=None, scale=1, spot_diameter_fullres=10,
-   )
+   # Load a Xenium run (cell x gene counts + centroids in um). Any AnnData with
+   # obs["imagecol"] / obs["imagerow"] (or obsm["spatial"]) in um works as well.
+   adata = sk.pp.read_xenium("Xenium_FFPE_Human_Breast_Cancer_Rep1/")   # output folder, or
+   # adata = sk.pp.read_xenium("..._cell_feature_matrix.h5", cells_file="..._cells.csv.gz")
 
-   # Bin cells into a 10 um grid
-   n_col = int((adata.obs.imagecol.max() - adata.obs.imagecol.min()) / 10)
-   n_row = int((adata.obs.imagerow.max() - adata.obs.imagerow.min()) / 10)
-   grid = st.tl.cci.grid(adata, n_row=n_row, n_col=n_col, n_cpus=8, verbose=False)
+   # Bin cells into a 10 um grid (same format as stlearn.tl.cci.grid, no stlearn needed)
+   grid = sk.pp.grid(adata, bin_um=10)
 
    # Contour the tumor from marker genes and compute the distance of every bin from the contour
    grid = sk.pp.calculate_distance(grid, pos_marker_ls=["CDH1"])
 
    sk.pl.preprocessed_images(grid, figsize=(800, None))   # tumor mask, contour, equidistant curves
+   sk.pl.gene_plot(grid, "KRT15")                          # expression on the tissue
    sk.pl.distance_gene_plot(grid, "KRT15")                 # expression vs distance from the tumor
    sk.pl.clustering_heatmap(grid, std=True)                # all genes clustered by distance profile
    sk.pl.deg_manhattan_plot(grid)                          # DEGs between intra- and peri-tumoral bands
@@ -123,6 +113,9 @@ Quick start
    # "Single tumor microenvironment": pseudo-bulk expression per tumor nest
    solid = sk.pp.convert_indivisual_solid(grid)            # inside each nest  (-inf, 0] um
    peri  = sk.pp.convert_indivisual_peri(grid, section=30) # 0 to 30 um band around each nest
+
+Runtime on the public 10x Xenium breast cancer section (167,782 cells, 752 x 547 bins):
+reading 1 s, gridding 1 s, ``calculate_distance`` about 80 s on a laptop.
 
 **Workflow 2: tumor core / margin / dist from a cell label**
 

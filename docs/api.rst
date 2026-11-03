@@ -9,6 +9,14 @@ Import SKNY as::
 Preprocessing: ``sk.pp``
 ------------------------
 
+Reading and gridding (no stlearn needed)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: skny.pp.read_xenium
+.. autofunction:: skny.pp.grid
+.. autofunction:: skny.pp.bin_names
+.. autofunction:: skny.pp.grid_shape
+
 Expression-based tumor contour (grid data)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -26,6 +34,7 @@ Cell-label based regions: tumor core / margin / dist (cell-level data)
 Plotting: ``sk.pl``
 -------------------
 
+.. autofunction:: skny.pl.gene_plot
 .. autofunction:: skny.pl.preprocessed_images
 .. autofunction:: skny.pl.equidistant_curves
 .. autofunction:: skny.pl.clustering_heatmap

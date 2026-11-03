@@ -74,6 +74,6 @@ setup(
         'Paper': 'https://doi.org/10.1371/journal.pcbi.1012854',
         'Changelog': 'https://github.com/shusakai/skny/blob/main/HISTORY.rst',
     },
-    version='0.3.1',
+    version='0.3.2',
     zip_safe=False,
 )

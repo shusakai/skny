@@ -5,7 +5,7 @@
 > measures the distance of every location / cell from it, and quantifies gene expression and
 > cell density in the tumor core, the peri-tumoral margin and distant tissue.
 
-- Install: `pip install skny` (Python 3.8-3.13; depends on anndata, numpy, pandas, scipy, matplotlib, seaborn, plotly, opencv-python, networkx, pillow). `pip install "skny[stlearn]"` adds stlearn, needed only to build the grid for workflow 1.
+- Install: `pip install skny` (Python 3.8-3.13; depends on anndata, numpy, pandas, scipy, matplotlib, seaborn, plotly, opencv-python, networkx, pillow). stlearn is NOT needed: `sk.pp.read_xenium` + `sk.pp.grid` replace `stlearn.ReadXenium` + `stlearn.tl.cci.grid` (grids from stlearn are still accepted).
 - Import: `import skny as sk` -> `sk.pp.*` (preprocessing) and `sk.pl.*` (plotting)
 - Docs: https://skny.readthedocs.io
 - API: https://skny.readthedocs.io/en/latest/api.html
@@ -23,14 +23,13 @@ or compute distance from it; SKNY works on AnnData so it can be combined with th
 
 ## Workflow 1: expression-based tumor contour on a 10 um grid (method of the paper)
 
-Input: an AnnData from `stlearn.tl.cci.grid` (10 um bins, `uns["grid_xedges"]`, `uns["grid_yedges"]`).
+Input: a 10 um grid built with `sk.pp.grid` (or `stlearn.tl.cci.grid`): `uns["grid_xedges"]`, `uns["grid_yedges"]`, bins named `grid_<n>`.
 
 ```python
-import skny as sk, stlearn as st
-adata = st.ReadXenium(feature_cell_matrix_file=..., cell_summary_file=..., library_id="x", image_path=None, scale=1, spot_diameter_fullres=10)
-n_col = int((adata.obs.imagecol.max() - adata.obs.imagecol.min()) / 10)
-n_row = int((adata.obs.imagerow.max() - adata.obs.imagerow.min()) / 10)
-grid = st.tl.cci.grid(adata, n_row=n_row, n_col=n_col, n_cpus=8, verbose=False)
+import skny as sk
+adata = sk.pp.read_xenium("xenium_output_dir/")   # or read_xenium(h5_path, cells_file=csv_or_parquet)
+# any AnnData with obs["imagecol"], obs["imagerow"] in um works; or pass spatial_key="spatial" to grid()
+grid = sk.pp.grid(adata, bin_um=10)               # sums counts per 10 um bin; obs n_cells, imagecol, imagerow
 
 grid = sk.pp.calculate_distance(grid, pos_marker_ls=["CDH1"], neg_marker_ls=None)
 # tumor bins = bins expressing any of pos_marker_ls (minus neg_marker_ls); contour by OpenCV;
@@ -38,6 +37,7 @@ grid = sk.pp.calculate_distance(grid, pos_marker_ls=["CDH1"], neg_marker_ls=None
 # Stores images in grid.uns[...] and a DataFrame grid.shortest with a "region" column
 # (distance bands of 30 um; negative = inside the tumor, positive = outside).
 
+sk.pl.gene_plot(grid, "KRT15", zoom_coord=None, vmax=None, ax=None)                # matplotlib map of one gene (cells or bins)
 sk.pl.preprocessed_images(grid, figsize=(800, None))  # plotly: mask, median filter, contour, equidistant curves
 sk.pl.equidistant_curves(grid, figsize=(500, None))
 sk.pl.distance_gene_plot(grid, "KRT15", x_range=None, y_range=None, std=False)  # expression vs distance band
@@ -47,6 +47,8 @@ sk.pl.deg_manhattan_plot(grid)                                                  
 solid = sk.pp.convert_indivisual_solid(grid, section=None)  # AnnData: one obs per tumor nest, mean expression inside (-inf, 0]; section in {0,-30,-60,-90,-120}
 peri  = sk.pp.convert_indivisual_peri(grid, section=30)     # AnnData: one obs per nest, mean expression in the band (0, +section]; section in {30,60,90,120,150}
 ```
+
+Runtime: 10x Xenium breast cancer section (168k cells, 752 x 547 bins): read 1 s, grid 1 s, calculate_distance ~80 s.
 
 `x_range` / `y_range` (lists of two ints, grid units) restrict the analysis to a region of interest.
 

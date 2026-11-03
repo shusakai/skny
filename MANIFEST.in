@@ -12,4 +12,9 @@ recursive-include tests *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 
-recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif *.ipynb
+recursive-include docs *.rst conf.py Makefile make.bat
+# tutorial notebooks (with outputs, ~10 MB) and images are on GitHub / Read the Docs, not in the sdist
+prune docs/notebooks
+prune docs/_static
+prune docs/_extra
+prune _images

@@ -5,3 +5,6 @@ dist/
 *.egg-info/
 .ipynb_checkpoints/
 docs/notebooks/tutorial_data/
+docs/notebooks/example_preprocessed.h5ad
+docs/notebooks/example_distance.txt
+docs/notebooks/figures/

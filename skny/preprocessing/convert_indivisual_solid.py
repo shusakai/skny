@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import anndata as ad
 import cv2
+from .grid import bin_names
 
 
 def convert_indivisual_solid(grid, section=None):
@@ -106,13 +107,13 @@ def convert_indivisual_solid(grid, section=None):
     
     # complement nan grid
     df_grid = pd.merge(
-        pd.DataFrame(index=["grid_" + str(i+1) for i in range(N_ROW * N_COL)]), 
+        pd.DataFrame(index=bin_names(grid)), 
         df_grid, right_index=True, left_index=True, how="left"
     ).fillna(np.nan)
     # complement nan grid
     df_solid = pd.DataFrame(
         np.array(df_shotest["solid"]).reshape(N_ROW, N_COL).T.reshape(N_ROW * N_COL), 
-        index=["grid_" + str(i+1) for i in range(N_ROW * N_COL)], columns=["solid"]
+        index=bin_names(grid), columns=["solid"]
     )
     # merge
     df_grid_solid = pd.merge(
