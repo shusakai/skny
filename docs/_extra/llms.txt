@@ -5,7 +5,7 @@
 > measures the distance of every location / cell from it, and quantifies gene expression and
 > cell density in the tumor core, the peri-tumoral margin and distant tissue.
 
-- Install: `pip install skny` (Python 3.8-3.10 recommended; depends on stlearn, scanpy, anndata, opencv-python, networkx, plotly, matplotlib)
+- Install: `pip install skny` (Python 3.8-3.13; depends on anndata, numpy, pandas, scipy, matplotlib, seaborn, plotly, opencv-python, networkx, pillow). `pip install "skny[stlearn]"` adds stlearn, needed only to build the grid for workflow 1.
 - Import: `import skny as sk` -> `sk.pp.*` (preprocessing) and `sk.pl.*` (plotting)
 - Docs: https://skny.readthedocs.io
 - API: https://skny.readthedocs.io/en/latest/api.html

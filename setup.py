@@ -34,6 +34,9 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Image Processing',
     ],
@@ -44,6 +47,12 @@ setup(
     ),
     long_description_content_type='text/x-rst',
     install_requires=requirements,
+    extras_require={
+        # stlearn is only needed to build the 10 um grid used by the expression-based workflow
+        # (``stlearn.tl.cci.grid``); SKNY itself does not import it.
+        'stlearn': ['stlearn'],
+        'test': ['pytest'],
+    },
     license="MIT license",
     long_description=readme + '\n\n' + history,
     include_package_data=True,
@@ -65,6 +74,6 @@ setup(
         'Paper': 'https://doi.org/10.1371/journal.pcbi.1012854',
         'Changelog': 'https://github.com/shusakai/skny/blob/main/HISTORY.rst',
     },
-    version='0.3.0',
+    version='0.3.1',
     zip_safe=False,
 )

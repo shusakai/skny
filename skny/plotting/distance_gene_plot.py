@@ -106,7 +106,10 @@ def distance_gene_plot(
     ## Histgram ------------------------------------------------------------
     # When standardizing for each gene
     if std:
-        df_grid_region_gene = df_grid_region_gene.apply(lambda x: scipy.stats.zscore(x), axis=1)
+        df_grid_region_gene = pd.DataFrame(
+            scipy.stats.zscore(df_grid_region_gene.to_numpy(dtype=float), axis=1),
+            index=df_grid_region_gene.index, columns=df_grid_region_gene.columns,
+        )  # vectorised; row-wise apply returns object dtype with pandas >= 2.2
         
     df_dist_gene = pd.DataFrame(df_grid_region_gene.loc[gene_symbol, :])
     df_dist_gene.index = [str(i) for i in df_dist_gene.index]

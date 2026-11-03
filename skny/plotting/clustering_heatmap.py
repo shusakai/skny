@@ -104,7 +104,10 @@ def clustering_heatmap(
     
     # if standardizing
     if std:
-        df_grid_region_gene = df_grid_region_gene.apply(lambda x: scipy.stats.zscore(x), axis=1)
+        df_grid_region_gene = pd.DataFrame(
+            scipy.stats.zscore(df_grid_region_gene.to_numpy(dtype=float), axis=1),
+            index=df_grid_region_gene.index, columns=df_grid_region_gene.columns,
+        )  # vectorised; row-wise apply returns object dtype with pandas >= 2.2
     
     g = sns.clustermap(
         df_grid_region_gene, 

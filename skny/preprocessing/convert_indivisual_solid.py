@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import anndata as ad
-import scanpy as sc
 import cv2
 
 
@@ -68,7 +67,7 @@ def convert_indivisual_solid(grid, section=None):
     # Load region annotation dataframe
     #df_shotest = grid.uns["shortest"]
     df_shotest = getattr(grid, "shortest")
-    df_shotest["right"] = df_shotest["region"].apply(lambda x: x.right)
+    df_shotest["right"] = [x.right if isinstance(x, pd.Interval) else np.nan for x in df_shotest["region"]]  # NaN-safe (pandas 3 maps NaN too)
     
     # convert to dataframe
     df_solid = pd.DataFrame(

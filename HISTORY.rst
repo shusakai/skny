@@ -2,8 +2,16 @@
 History
 =======
 
-Unreleased
-----------
+0.3.1 (2026-11-03)
+------------------
+
+* Dependencies relaxed: no more pins on ``numpy`` / ``numba``; ``stlearn`` and ``scanpy`` are no
+  longer required (install ``skny[stlearn]`` for the grid tutorial). SKNY now runs on
+  Python 3.8 to 3.13 with numpy 2 and pandas 3.
+* Compatibility fixes for recent matplotlib / pandas (figure buffer access, row-wise z-score,
+  ``applymap`` removal, NaN-safe distance-band handling in ``convert_indivisual_*``).
+* New end-to-end regression test of the grid workflow on synthetic data
+  (``tests/test_grid_workflow.py``, no external data needed).
 
 * Citation information (PLOS Computational Biology 2025) added to the README and a
   ``CITATION.cff`` file; ``llms.txt`` and ``AGENTS.md`` added for coding assistants.

@@ -109,7 +109,7 @@ def deg_manhattan_plot(
         
         # control is all
         df_control = df_grid_region.drop("region", axis=1)
-        df_control = df_control.applymap(lambda x: np.log(x+1))
+        df_control = df_control.apply(np.log1p)  # vectorised; applymap was removed in pandas 3
         gene_ls = df_grid.columns.tolist()
 
         # place holder
@@ -117,7 +117,7 @@ def deg_manhattan_plot(
         # target is expression which is belong to each region 
         for i in region_ls:
             df_target = df_grid_region.groupby("region").get_group(i).drop("region", axis=1)
-            df_target = df_target.applymap(lambda x: np.log(x+1))
+            df_target = df_target.apply(np.log1p)  # vectorised; applymap was removed in pandas 3
             
             temp_p_res_ls = []        
             for s in gene_ls:

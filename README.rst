@@ -70,15 +70,19 @@ Installation
 
    pip install skny
 
-SKNY depends on ``stlearn`` (for the grid workflow), ``scanpy``/``anndata``, ``opencv-python``,
-``networkx``, ``plotly`` and ``matplotlib``. We currently recommend a dedicated environment with
-Python 3.8 to 3.10 because of the pinned ``numpy`` / ``numba`` versions required by ``stlearn``:
+SKNY supports Python 3.8 to 3.13 (tested with numpy 2 and pandas 3) and depends only on
+``anndata``, ``numpy``, ``pandas``, ``scipy``, ``matplotlib``, ``seaborn``, ``plotly``,
+``opencv-python``, ``networkx`` and ``pillow``, so it installs alongside current ``scanpy`` /
+``squidpy`` environments.
+
+Workflow 1 (expression-based contour) expects a 10 µm grid built with ``stlearn.tl.cci.grid``;
+install it with the extra if you do not have ``stlearn`` already:
 
 .. code-block:: console
 
-   conda create -n skny python=3.10
-   conda activate skny
-   pip install skny
+   pip install "skny[stlearn]"
+
+Workflow 2 (cell-label based regions) needs no additional package.
 
 
 Quick start
@@ -91,7 +95,8 @@ Quick start
    import skny as sk
    import stlearn as st
 
-   # Load a Xenium run with stlearn (any AnnData with obs["imagecol"], obs["imagerow"] works)
+   # Load a Xenium run with stlearn 0.4.x (any AnnData with obs["imagecol"], obs["imagerow"] works;
+   # with stlearn >= 1.0 use the spatialdata readers and st.tl.cci.grid without n_cpus)
    adata = st.ReadXenium(
        feature_cell_matrix_file="Xenium_FFPE_Human_Breast_Cancer_Rep1_cell_feature_matrix.h5",
        cell_summary_file="Xenium_FFPE_Human_Breast_Cancer_Rep1_cells.csv.gz",

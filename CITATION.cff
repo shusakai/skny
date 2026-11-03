@@ -15,8 +15,8 @@ authors:
     given-names: Shunsuke A.
     email: shusakai@east.ncc.go.jp
     affiliation: National Cancer Center Japan
-version: 0.3.0
-date-released: "2026-11-02"
+version: 0.3.1
+date-released: "2026-11-03"
 license: MIT
 repository-code: "https://github.com/shusakai/skny"
 url: "https://skny.readthedocs.io"

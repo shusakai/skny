@@ -42,6 +42,10 @@ Public API = everything imported in `skny/pp.py` and `skny/pl.py`. Function name
   attribute `grid.shortest` (a DataFrame). Workflow 2 writes to `adata.obs[key_added]`,
   `adata.obs[key_added + "_dist_um"]` and `adata.uns[key_added]`.
 - Coordinates for workflow 2 must be in micrometres.
+- `stlearn` and `scanpy` are **not** imported by the package; `stlearn` is an optional extra used
+  only in the tutorials to build the grid. Do not add hard dependencies on them.
+- Keep pandas / numpy usage version-agnostic (no `applymap`, no row-wise `apply` returning arrays,
+  no `fig.canvas.renderer`).
 - Docstrings use the NumPy style (rendered with sphinx.ext.napoleon). Keep them accurate when
   changing a signature; `docs/api.rst` lists the public functions.
 - Plotting functions in workflow 1 use plotly; workflow 2 uses matplotlib.
@@ -49,10 +53,14 @@ Public API = everything imported in `skny/pp.py` and `skny/pl.py`. Function name
 ## Running tests and docs
 
 ```bash
-pip install -e .
-pytest tests/test_region.py            # fast, no external data
+pip install -e ".[test]"
+pytest tests/                           # all tests run on synthetic data, no download needed
 cd docs && make html                    # requires pandoc; notebooks are not executed (nbsphinx_execute = "never")
 ```
+
+`tests/test_grid_workflow.py` builds a 10 um grid without stlearn and runs workflow 1 end to end;
+`tests/test_region.py` covers workflow 2. Run the suite on the oldest (3.8) and newest Python you
+have: the code must work with numpy 1.x and 2.x, pandas 1.5 and 3.x.
 
 The Xenium tutorials download public 10x data (see the first cells of each notebook).
 

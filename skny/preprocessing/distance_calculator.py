@@ -67,7 +67,7 @@ def calculate_distance(grid, pos_marker_ls, neg_marker_ls=None):
     -------
     AnnData
         The same ``grid`` with the processing images added to ``grid.uns``
-        (``"marker"``, ``"marker_median"``, ``"marker_delineation"``, ``"shotest"``,
+        (``"marker"``, ``"marker_median"``, ``"marker_delineation"``,
         ``"shotest_30_delineation"``, ``"shotest_region_<band>_delineation"``) and the
         per-bin distance table stored as the attribute ``grid.shortest`` (a DataFrame with
         a ``"region"`` column holding the distance band of each bin).
@@ -125,9 +125,9 @@ def calculate_distance(grid, pos_marker_ls, neg_marker_ls=None):
     ax.axis('off')
     # convert from fig to numpy
     fig.canvas.draw()
-    img = np.array(fig.canvas.renderer.buffer_rgba())
+    img = np.asarray(fig.canvas.buffer_rgba())  # public API; works with matplotlib 3.1+ (Agg)
     img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
-    plt.close()
+    plt.close(fig)
     grid.uns["marker"] = img.copy() # add to grid object
 
     
@@ -268,30 +268,6 @@ def calculate_distance(grid, pos_marker_ls, neg_marker_ls=None):
     df_shotest = pd.merge(
         df_nodes, df_shotest, right_index=True, left_index=True, how="left"
     ).fillna(np.nan)
-
-    # debag
-    #return grid
-    
-    ## Color scale of distance from surface ------------------------
-    #fig, ax = plt.subplots(figsize=(N_COL, N_ROW), dpi=1, tight_layout=True)
-    #cmap = matplotlib.cm.Spectral
-    #cmap.set_bad('black',1.)
-    #cmap.set_under(color='black') 
-    #elev_min=df_shotest["euclidean"].min()
-    #elev_max=df_shotest["euclidean"].max()
-    #mid_val=0
-    
-    #ax.imshow(
-    #    np.array(df_shotest["euclidean"]).reshape(N_ROW, N_COL), cmap=cmap, 
-    #    clim=(elev_min, elev_max), norm=MidpointNormalize(midpoint=mid_val,vmin=elev_min, vmax=elev_max)
-    #)
-    #ax.axis('off')
-    
-    # convert from fig to numpy
-    fig.canvas.draw()
-    img = np.array(fig.canvas.renderer.buffer_rgba())
-    plt.close()
-    grid.uns["shotest"] = img # add to grid object
 
     ## Delineation ----------------------------------
     col_ls = []
