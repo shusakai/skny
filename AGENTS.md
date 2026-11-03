@@ -46,6 +46,9 @@ Public API = everything imported in `skny/pp.py` and `skny/pl.py`. Function name
 - `stlearn` and `scanpy` are **not** imported by the package. `sk.pp.read_xenium` + `sk.pp.grid`
   replace `stlearn.ReadXenium` + `stlearn.tl.cci.grid`; grids from stlearn are still accepted.
   Do not add hard dependencies on stlearn / scanpy.
+- `calculate_distance` defines tumor bins from marker genes (`pos_marker_ls`) or from cell labels
+  (`use_label` + `pos_label_ls`; requires `sk.pp.grid(..., use_label=...)` so that `uns[use_label]`
+  holds the per-bin label fractions). Exactly one of the two must be given.
 - Grid bins are named `grid_<n>` with `n = col * n_row + row`, numbered from 0 (stlearn
   convention). Always use `bin_names(grid)` to build the full bin index; never hard-code
   `grid_1 ...` (that was the one-bin offset bug fixed in 0.3.2).

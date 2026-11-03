@@ -2,6 +2,22 @@
 History
 =======
 
+0.3.3 (2026-11-03)
+------------------
+
+* ``skny.pp.calculate_distance`` can now define the tumor spatial domain from **annotated cell
+  labels** (``use_label`` + ``pos_label_ls`` / ``neg_label_ls``, with ``min_cells`` and
+  ``min_fraction``), in addition to marker genes. Build the grid with
+  ``skny.pp.grid(adata, use_label="cell_type")``. The definition used is stored in
+  ``uns["tumor_definition"]``.
+* **Tumor interior fix.** The binary tumor image is now built directly from the bins instead of
+  being rendered through a matplotlib figure. The rendering interpolated the colours, so most
+  tumor bins no longer had the exact colour the pipeline looks for and were treated as *outside*
+  the tumor: on the 10x Xenium breast cancer section only 13k of 78k CDH1+ bins survived
+  (3.5k after the median filter) and 27k bins got a negative (intra-tumoral) distance, versus
+  67k now. Intra-tumoral bands and per-nest ("solid") objects are therefore larger than with
+  <= 0.3.2; the contour itself and the peri-tumoral bands change little.
+
 0.3.2 (2026-11-03)
 ------------------
 

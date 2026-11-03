@@ -69,6 +69,44 @@ class TestGridAndReader(unittest.TestCase):
         g3 = sk.pp.grid(cells, bin_um=10, spatial_key="spatial", verbose=False)
         self.assertEqual(g3.shape, g.shape)
 
+    def test_label_based_contour(self):
+        import skny as sk
+
+        cells = make_cells(n=20000)
+        g_lab = sk.pp.grid(cells, bin_um=10, use_label="cell_type", verbose=False)
+        g_mrk = sk.pp.grid(cells, bin_um=10, verbose=False)
+        d_lab = sk.pp.calculate_distance(g_lab, use_label="cell_type", pos_label_ls=["Tumor"])
+        d_mrk = sk.pp.calculate_distance(g_mrk, pos_marker_ls=["CDH1"])
+        self.assertEqual(d_lab.uns["tumor_definition"]["mode"], "label")
+        self.assertEqual(d_mrk.uns["tumor_definition"]["mode"], "marker")
+        # CDH1 is expressed only by "Tumor" cells, so both definitions give (almost) the same mask
+        m1 = d_lab.uns["marker"][..., 0] > 0; m2 = d_mrk.uns["marker"][..., 0] > 0
+        agree = (m1 == m2).mean()
+        self.assertGreater(agree, 0.98)
+        bands = d_lab.shortest.dropna()["region"].apply(lambda i: i.right)
+        self.assertTrue((bands < 0).any() and (bands > 0).any())
+        # stricter domain: min_fraction / min_cells shrink the mask, neg labels remove bins
+        d_strict = sk.pp.calculate_distance(sk.pp.grid(cells, bin_um=10, use_label="cell_type", verbose=False),
+                                            use_label="cell_type", pos_label_ls="Tumor", min_cells=2, min_fraction=0.5)
+        self.assertLessEqual((d_strict.uns["marker"][..., 0] > 0).sum(), m1.sum())
+        d_neg = sk.pp.calculate_distance(sk.pp.grid(cells, bin_um=10, use_label="cell_type", verbose=False),
+                                         use_label="cell_type", pos_label_ls=["Tumor"], neg_label_ls=["Stroma"])
+        self.assertLess((d_neg.uns["marker"][..., 0] > 0).sum(), m1.sum())
+        # the downstream functions work on a label-based grid
+        sk.pl.distance_gene_plot(d_lab, "KRT15", show=False)
+        solid = sk.pp.convert_indivisual_solid(d_lab); self.assertEqual(solid.n_obs, 1)
+        # errors: both / neither definitions, missing use_label, unknown label
+        with self.assertRaises(ValueError):
+            sk.pp.calculate_distance(g_mrk, pos_marker_ls=["CDH1"], pos_label_ls=["Tumor"])
+        with self.assertRaises(ValueError):
+            sk.pp.calculate_distance(g_mrk)
+        with self.assertRaises(ValueError):
+            sk.pp.calculate_distance(g_lab, pos_label_ls=["Tumor"])
+        with self.assertRaises(KeyError):
+            sk.pp.calculate_distance(g_mrk, use_label="cell_type", pos_label_ls=["Tumor"])
+        with self.assertRaises(KeyError):
+            sk.pp.calculate_distance(g_lab, use_label="cell_type", pos_label_ls=["Malignant"])
+
     def test_bin_names_zero_and_one_based(self):
         import skny as sk
 

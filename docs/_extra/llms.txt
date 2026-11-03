@@ -33,6 +33,10 @@ grid = sk.pp.grid(adata, bin_um=10)               # sums counts per 10 um bin; o
 
 grid = sk.pp.calculate_distance(grid, pos_marker_ls=["CDH1"], neg_marker_ls=None)
 # tumor bins = bins expressing any of pos_marker_ls (minus neg_marker_ls); contour by OpenCV;
+# Label-based alternative (tumor defined by annotated cell types instead of marker genes):
+#   grid = sk.pp.grid(adata, bin_um=10, use_label="cell_type")
+#   grid = sk.pp.calculate_distance(grid, use_label="cell_type", pos_label_ls=["Malignant"], neg_label_ls=None, min_cells=1, min_fraction=0.0)
+# grid.uns["tumor_definition"] records which definition was used.
 # shortest-path distance (networkx Dijkstra) from the contour to every bin.
 # Stores images in grid.uns[...] and a DataFrame grid.shortest with a "region" column
 # (distance bands of 30 um; negative = inside the tumor, positive = outside).

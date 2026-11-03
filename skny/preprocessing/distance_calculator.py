@@ -43,92 +43,154 @@ def cv2pil(image):
     new_image = Image.fromarray(new_image)
     return new_image
 
-def calculate_distance(grid, pos_marker_ls, neg_marker_ls=None):
-    """Contour the tumor from marker expression and compute the distance of every grid bin from it.
+def _tumor_bins(grid, pos_marker_ls=None, neg_marker_ls=None, use_label=None, pos_label_ls=None,
+                neg_label_ls=None, min_cells=1, min_fraction=0.0):
+    """Return a Series (index = grid.obs_names) with 1 for tumor bins and -1 otherwise."""
+    if (pos_marker_ls is None) == (pos_label_ls is None):
+        raise ValueError("give exactly one of pos_marker_ls (marker genes) or pos_label_ls (cell labels)")
+    if isinstance(pos_marker_ls, str):
+        pos_marker_ls = [pos_marker_ls]
+    if isinstance(neg_marker_ls, str):
+        neg_marker_ls = [neg_marker_ls]
+    if isinstance(pos_label_ls, str):
+        pos_label_ls = [pos_label_ls]
+    if isinstance(neg_label_ls, str):
+        neg_label_ls = [neg_label_ls]
+
+    if pos_marker_ls is not None:
+        # ---- expression-based: a bin is tumor if the summed expression of the positive markers is >= 1
+        df = grid.to_df()
+        missing = [g for g in list(pos_marker_ls) + list(neg_marker_ls or []) if g not in df.columns]
+        if missing:
+            raise KeyError(f"marker gene(s) not in grid.var_names: {missing}")
+        pos = df[list(pos_marker_ls)].sum(axis=1).to_numpy(float) >= 1
+        if neg_marker_ls:
+            pos &= ~(df[list(neg_marker_ls)].sum(axis=1).to_numpy(float) >= 1)
+        definition = dict(mode="marker", pos_marker_ls=list(pos_marker_ls), neg_marker_ls=list(neg_marker_ls or []))
+    else:
+        # ---- label-based: a bin is tumor if it contains >= min_cells cells of the positive labels
+        #      (and at least min_fraction of its cells), and no (>= min_cells) cells of the negative labels
+        if use_label is None:
+            raise ValueError("use_label (the obs column given to skny.pp.grid(..., use_label=...)) is required with pos_label_ls")
+        if use_label not in grid.uns:
+            raise KeyError(
+                f"uns['{use_label}'] not found: build the grid with skny.pp.grid(adata, use_label='{use_label}') "
+                f"(or stlearn.tl.cci.grid(adata, ..., use_label='{use_label}'))"
+            )
+        if "n_cells" not in grid.obs:
+            raise KeyError("obs['n_cells'] not found in the grid object")
+        frac = pd.DataFrame(grid.uns[use_label]).loc[grid.obs_names]
+        n_cells = grid.obs["n_cells"].to_numpy(float)
+        missing = [l for l in list(pos_label_ls) + list(neg_label_ls or []) if l not in frac.columns]
+        if missing:
+            raise KeyError(f"label(s) not found in uns['{use_label}'] (available: {list(frac.columns)}): {missing}")
+        f_pos = frac[list(pos_label_ls)].sum(axis=1).to_numpy(float)
+        pos = (f_pos * n_cells >= min_cells) & (f_pos >= min_fraction)
+        if neg_label_ls:
+            f_neg = frac[list(neg_label_ls)].sum(axis=1).to_numpy(float)
+            pos &= ~(f_neg * n_cells >= min_cells)
+        definition = dict(mode="label", use_label=use_label, pos_label_ls=list(pos_label_ls),
+                          neg_label_ls=list(neg_label_ls or []), min_cells=int(min_cells), min_fraction=float(min_fraction))
+    series = pd.Series(np.where(pos, 1, -1), index=grid.obs_names, name="tumor_grid")
+    return series, definition
+
+
+def calculate_distance(
+    grid, pos_marker_ls=None, neg_marker_ls=None,
+    use_label=None, pos_label_ls=None, neg_label_ls=None, min_cells=1, min_fraction=0.0,
+):
+    """Detect the tumor spatial domain on a grid and compute the distance of every bin from its contour.
 
     This is the core step of the SKNY grid workflow (Sakai et al., PLOS Comput Biol 2025).
-    Bins expressing any gene in ``pos_marker_ls`` (and none in ``neg_marker_ls``) are
-    taken as tumor, the binary image is median-filtered and contoured with OpenCV, and the
-    shortest-path distance from the contour to every bin is computed on a pixel graph
-    (multi-source Dijkstra, 8-connected). Distances are then binned into 30 um bands:
-    negative bands lie inside the tumor, positive bands outside (peri-tumoral stroma).
+    The tumor bins are defined either from **marker gene expression** (``pos_marker_ls`` /
+    ``neg_marker_ls``) or from **annotated cell labels** (``use_label`` + ``pos_label_ls`` /
+    ``neg_label_ls``; the grid must have been built with ``skny.pp.grid(adata, use_label=...)``).
+    The binary image is median-filtered and contoured with OpenCV, and the shortest-path distance
+    from the contour to every bin is computed on a pixel graph (multi-source Dijkstra,
+    8-connected). Distances are then binned into 30 um bands: negative bands lie inside the
+    tumor, positive bands outside (peri-tumoral stroma).
 
     Parameters
     ----------
     grid : AnnData
-        Gridded object from ``stlearn.tl.cci.grid`` (10 um bins recommended) with
-        ``uns["grid_xedges"]`` and ``uns["grid_yedges"]``.
-    pos_marker_ls : list of str
+        Gridded object from :func:`skny.pp.grid` or ``stlearn.tl.cci.grid`` (10 um bins
+        recommended) with ``uns["grid_xedges"]`` and ``uns["grid_yedges"]``.
+    pos_marker_ls : list of str or None
         Marker genes that define the tumor (e.g. ``["CDH1"]`` or ``["EPCAM", "KRT8"]``).
         A bin is tumor if the summed expression of these genes is >= 1.
     neg_marker_ls : list of str or None
-        Genes whose expression excludes a bin from the tumor (e.g. stromal markers).
+        Genes whose expression (>= 1) excludes a bin from the tumor (e.g. stromal markers).
+    use_label : str or None
+        Name of the cell-label column given to ``skny.pp.grid(adata, use_label=...)``; the
+        per-bin label fractions are read from ``grid.uns[use_label]``. Required with ``pos_label_ls``.
+    pos_label_ls : list of str or None
+        Cell labels that define the tumor (e.g. ``["Malignant"]`` or ``["DCIS", "IDC"]``).
+        A bin is tumor if it contains at least ``min_cells`` such cells and they make up at least
+        ``min_fraction`` of the cells in the bin.
+    neg_label_ls : list of str or None
+        Cell labels whose presence (>= ``min_cells`` cells) excludes a bin from the tumor.
+    min_cells : int
+        Minimum number of positive-label cells per bin (label mode only). Default 1.
+    min_fraction : float
+        Minimum fraction (0-1) of positive-label cells per bin (label mode only). Default 0,
+        i.e. any bin touched by a tumor cell; use e.g. 0.5 for a stricter domain.
 
     Returns
     -------
     AnnData
         The same ``grid`` with the processing images added to ``grid.uns``
         (``"marker"``, ``"marker_median"``, ``"marker_delineation"``,
-        ``"shotest_30_delineation"``, ``"shotest_region_<band>_delineation"``) and the
-        per-bin distance table stored as the attribute ``grid.shortest`` (a DataFrame with
-        a ``"region"`` column holding the distance band of each bin).
+        ``"shotest_30_delineation"``, ``"shotest_region_<band>_delineation"``), the tumor
+        definition in ``grid.uns["tumor_definition"]``, and the per-bin distance table stored
+        as the attribute ``grid.shortest`` (a DataFrame with a ``"region"`` column holding the
+        distance band of each bin).
 
     See Also
     --------
+    skny.pp.grid : builds the grid (pass ``use_label`` to enable the label mode).
     skny.pl.preprocessed_images, skny.pl.equidistant_curves, skny.pl.distance_gene_plot,
     skny.pl.clustering_heatmap, skny.pl.deg_manhattan_plot,
     skny.pp.convert_indivisual_solid, skny.pp.convert_indivisual_peri,
-    skny.pp.calculate_region : cell-label based alternative that does not need a grid.
+    skny.pp.calculate_region : cell-level core / margin / dist regions from a label (no grid).
 
     Examples
     --------
-    >>> grid = st.tl.cci.grid(adata, n_row=n_row, n_col=n_col)
+    Marker-based (as in the paper):
+
+    >>> grid = sk.pp.grid(adata, bin_um=10)
     >>> grid = sk.pp.calculate_distance(grid, pos_marker_ls=["CDH1"])
+
+    Label-based, from a ``cell_type`` annotation in ``adata.obs``:
+
+    >>> grid = sk.pp.grid(adata, bin_um=10, use_label="cell_type")
+    >>> grid = sk.pp.calculate_distance(grid, use_label="cell_type", pos_label_ls=["Malignant"],
+    ...                                 neg_label_ls=["Fibroblast"], min_fraction=0.5)
     >>> sk.pl.distance_gene_plot(grid, "KRT15")
     """
-
     ## get col and row length data from grid object --------------------------
     N_ROW = len(grid.uns["grid_yedges"]) - 1
     N_COL = len(grid.uns["grid_xedges"]) - 1
     
-    ## Difine positive grid ---------------------------
-    pos_series = sum([ grid.to_df()[i] for i in pos_marker_ls])
-    pos_series = pd.Series([1 if i>=1 else 0 for i in pos_series], index=pos_series.index)
-    
-    # distract negative grid
-    if neg_marker_ls != None:
-        neg_series = sum([ grid.to_df()[i] for i in neg_marker_ls])
-        neg_series = pd.Series([1 if i>=1 else 0 for i in neg_series], index=neg_series.index)
-        pos_series = pos_series - neg_series
-        pos_series = pd.Series([-1 if i==0 else i for i in pos_series], index=pos_series.index)
-    
-    else:
-        pos_series = pd.Series([-1 if i==0 else i for i in pos_series], index=pos_series.index)
-    
+    ## Define tumor bins (marker genes or cell labels) ---------------------------
+    pos_series, definition = _tumor_bins(
+        grid, pos_marker_ls, neg_marker_ls, use_label, pos_label_ls, neg_label_ls, min_cells, min_fraction
+    )
+    grid.uns["tumor_definition"] = definition
+
     # expand information of all grid
-    pos_series.name = "tumor_grid"
     df_grid_tumor = pd.merge(
         pd.DataFrame(index=bin_names(grid)), 
         pos_series, right_index=True, left_index=True, how="left"
     ).fillna(-1)
 
 
-    ## Generate data of positive grid---------------------------
-    fig, ax = plt.subplots(figsize=(N_COL, N_ROW), dpi=1, tight_layout=True)
-    cmap = matplotlib.cm.viridis
-    cmap.set_bad('black',1.)
-    cmap.set_under(color='black') 
-    ax.imshow(
-        np.array(df_grid_tumor["tumor_grid"]).reshape(N_COL, N_ROW).T, cmap=cmap,
-        vmin=0,
-        vmax=1,
-    )
-    ax.axis('off')
-    # convert from fig to numpy
-    fig.canvas.draw()
-    img = np.asarray(fig.canvas.buffer_rgba())  # public API; works with matplotlib 3.1+ (Agg)
-    img = cv2.cvtColor(img, cv2.COLOR_RGBA2BGR)
-    plt.close(fig)
+    ## Generate the binary tumor image (one pixel per bin) ---------------------------
+    # Tumor bins are drawn in the colour the original matplotlib/viridis rendering used
+    # (RGB 253, 231, 36; stored as BGR for OpenCV), background in black. Building the image
+    # directly avoids the interpolation / HiDPI artefacts of rendering through a figure.
+    tumor_mask = np.asarray(df_grid_tumor["tumor_grid"], dtype=float).reshape(N_COL, N_ROW).T == 1
+    img = np.zeros((N_ROW, N_COL, 3), dtype=np.uint8)
+    img[tumor_mask] = (36, 231, 253)
     grid.uns["marker"] = img.copy() # add to grid object
 
     

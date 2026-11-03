@@ -16,7 +16,7 @@ https://doi.org/10.1371/journal.pcbi.1012854
 
 __author__ = """Shunsuke A. Sakai"""
 __email__ = 'shusakai@east.ncc.go.jp'
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 __url__  = 'https://github.com/shusakai/skny'
 
 

@@ -48,9 +48,10 @@ Two workflows
 
 **1. Expression-based tumor contour on a grid** (``sk.pp.calculate_distance``; the method in the paper)
 
-The tissue is binned into a 10 µm grid, the tumor is contoured from marker gene expression
-(e.g. ``CDH1``, ``EPCAM``, keratins) with image processing, and the shortest-path distance from
-the contour to every grid bin is calculated. Downstream functions then give:
+The tissue is binned into a 10 µm grid, the tumor is contoured with image processing either from
+marker gene expression (e.g. ``CDH1``, ``EPCAM``, keratins) or from an annotated cell label
+(e.g. ``cell_type == "Malignant"``), and the shortest-path distance from the contour to every grid
+bin is calculated. Downstream functions then give:
 
 * gene expression as a function of distance from the tumor border (``sk.pl.distance_gene_plot``),
 * clustering of all genes by their distance profile (``sk.pl.clustering_heatmap``),
@@ -103,6 +104,11 @@ Quick start
 
    # Contour the tumor from marker genes and compute the distance of every bin from the contour
    grid = sk.pp.calculate_distance(grid, pos_marker_ls=["CDH1"])
+
+   # ... or define the tumor from an existing cell-type annotation instead of marker genes
+   grid = sk.pp.grid(adata, bin_um=10, use_label="cell_type")
+   grid = sk.pp.calculate_distance(grid, use_label="cell_type", pos_label_ls=["Malignant"],
+                                   neg_label_ls=["Fibroblast"], min_fraction=0.5)
 
    sk.pl.preprocessed_images(grid, figsize=(800, None))   # tumor mask, contour, equidistant curves
    sk.pl.gene_plot(grid, "KRT15")                          # expression on the tissue
